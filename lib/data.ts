@@ -465,31 +465,56 @@ export const projects: Project[] = [
   },
 ];
 
-export const certifications = [
+// To link a certificate PDF:
+// 1. Drop the PDF into public/certificates/ (e.g. public/certificates/altium.pdf)
+// 2. Uncomment the pdf line for that entry below
+// Optionally also add a preview image (jpg/png thumbnail of the certificate)
+export const certifications: {
+  name: string;
+  issuer: string;
+  year: string;
+  image?: string; // optional thumbnail preview
+  pdf?: string;   // path to PDF in public/certificates/
+}[] = [
   {
     name: "Altium Education PCB Design Course",
     issuer: "Altium",
     year: "2024",
+    pdf: "/certificates/altium.pdf",
+    image: "/certificates/altium.png",
   },
   {
-    name: "Linux for Robotics",
-    issuer: "The Construct",
+    name: "Introduction to Linux",
+    issuer: "Linux Foundation",
     year: "2024",
+    pdf: "/certificates/linux.pdf",
+    image: "/certificates/linux.png",
   },
   {
     name: "C++ for Robotics",
     issuer: "The Construct",
     year: "2024",
+    // pdf: "/certificates/cpp-robotics.pdf",
   },
   {
     name: "Python for Robotics",
     issuer: "The Construct",
     year: "2024",
+    // pdf: "/certificates/python-robotics.pdf",
+  },
+  {
+    name: "Getting Started with AI on Jetson Nano",
+    issuer: "NVIDIA",
+    year: "2026",
+    pdf: "/certificates/nvidia.pdf",
+    image: "/certificates/nvidia.png",
   },
   {
     name: "Google Data Analytics",
     issuer: "Google / Coursera",
     year: "2023",
+    pdf: "/certificates/google.pdf",
+    image: "/certificates/google.png",
   },
 ];
 
