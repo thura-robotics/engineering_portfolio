@@ -89,8 +89,8 @@ export default function FeaturedProjects() {
                       letterSpacing: "0.06em",
                       textTransform: "uppercase",
                       color: "var(--primary)",
-                      background: "rgba(56,189,248,0.12)",
-                      border: "1px solid rgba(56,189,248,0.3)",
+                      background: "rgba(34,211,238,0.14)",
+                      border: "1px solid rgba(34,211,238,0.35)",
                       padding: "0.2rem 0.6rem",
                       borderRadius: "999px",
                     }}

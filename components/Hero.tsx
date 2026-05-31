@@ -13,8 +13,9 @@ export default function Hero() {
         display: "flex",
         alignItems: "center",
         paddingTop: "64px",
-        background: `radial-gradient(ellipse at 20% 50%, rgba(56,189,248,0.06) 0%, transparent 60%),
-                     radial-gradient(ellipse at 80% 20%, rgba(56,189,248,0.04) 0%, transparent 50%),
+        background: `radial-gradient(ellipse at 18% 45%, rgba(37,99,235,0.18) 0%, transparent 55%),
+                     radial-gradient(ellipse at 80% 25%, rgba(6,182,212,0.14) 0%, transparent 50%),
+                     radial-gradient(ellipse at 60% 90%, rgba(34,197,94,0.10) 0%, transparent 55%),
                      var(--bg)`,
       }}
     >
@@ -46,11 +47,11 @@ export default function Hero() {
           </p>
 
           <h1
+            className="gradient-text"
             style={{
               fontSize: "clamp(2.5rem, 6vw, 4rem)",
               fontWeight: 800,
               lineHeight: 1.1,
-              color: "var(--text)",
               marginBottom: "0.75rem",
               letterSpacing: "-0.03em",
             }}
@@ -102,19 +103,20 @@ export default function Hero() {
                 e.preventDefault();
                 document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" });
               }}
+              className="gradient-bg"
               style={{
                 display: "inline-block",
                 padding: "0.7rem 1.75rem",
-                background: "var(--primary)",
-                color: "var(--bg)",
+                color: "#fff",
                 fontWeight: 700,
                 fontSize: "0.9rem",
                 borderRadius: "0.5rem",
                 textDecoration: "none",
-                transition: "opacity 0.2s",
+                transition: "opacity 0.2s, transform 0.2s",
+                boxShadow: "0 6px 20px rgba(6, 182, 212, 0.3)",
               }}
-              onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.opacity = "0.85")}
-              onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.opacity = "1")}
+              onMouseEnter={(e) => { const el = e.target as HTMLAnchorElement; el.style.opacity = "0.9"; el.style.transform = "translateY(-2px)"; }}
+              onMouseLeave={(e) => { const el = e.target as HTMLAnchorElement; el.style.opacity = "1"; el.style.transform = "translateY(0)"; }}
             >
               View Projects
             </a>
@@ -195,22 +197,26 @@ export default function Hero() {
         {/* Photo */}
         <div style={{ flexShrink: 0 }}>
           <div
+            className="gradient-bg"
             style={{
               width: "clamp(200px, 28vw, 280px)",
               height: "clamp(200px, 28vw, 280px)",
               borderRadius: "50%",
-              background: "var(--surface)",
-              border: "3px solid var(--primary)",
-              boxShadow: "0 0 40px rgba(56,189,248,0.15)",
-              overflow: "hidden",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "0.8rem",
-              color: "var(--text-muted)",
+              padding: "4px",
+              boxShadow: "0 0 50px rgba(34,211,238,0.3)",
             }}
           >
-            <img src="/photo.jpg" alt="Thura Zaw" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                borderRadius: "50%",
+                overflow: "hidden",
+                background: "var(--surface)",
+              }}
+            >
+              <img src="/photo.jpg" alt="Thura Zaw" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            </div>
           </div>
         </div>
       </div>

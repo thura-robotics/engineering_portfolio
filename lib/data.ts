@@ -100,12 +100,13 @@ export const experience = [
 export const skills = [
   {
     category: "Programming Languages",
-    items: ["Python", "C++", "C", "MATLAB", "C#"],
+    // Python, C++ removed — shown in logo strip
+    items: ["C", "MATLAB", "C#"],
   },
   {
     category: "Robotics & Autonomy",
+    // ROS / ROS2 removed — shown in logo strip
     items: [
-      "ROS / ROS2",
       "Robot Kinematics",
       "Feedback Control",
       "PID Control",
@@ -122,16 +123,16 @@ export const skills = [
       "Sensor Fusion",
       "Extended Kalman Filter (EKF)",
       "SLAM",
-      "Simultaneous Localisation and Mapping",
+      "Simultaneous Localisation & Mapping",
       "LiDAR Processing",
       "IMU Integration",
     ],
   },
   {
     category: "AI & Machine Learning",
+    // TensorFlow removed — shown in logo strip
     items: [
       "PyTorch",
-      "TensorFlow",
       "Deep Learning",
       "Reinforcement Learning",
       "DDPG",
@@ -142,8 +143,8 @@ export const skills = [
   },
   {
     category: "Computer Vision",
+    // OpenCV removed — shown in logo strip
     items: [
-      "OpenCV",
       "Object Detection",
       "Image Segmentation",
       "Roboflow",
@@ -154,9 +155,8 @@ export const skills = [
   },
   {
     category: "Embedded Systems",
+    // STM32, Arduino removed — shown in logo strip
     items: [
-      "STM32",
-      "Arduino",
       "ESP32 / ESP8266",
       "CAN Bus / SocketCAN",
       "Embedded Firmware",
@@ -166,9 +166,8 @@ export const skills = [
   },
   {
     category: "PCB & Hardware Design",
+    // KiCAD, Altium removed — shown in logo strip
     items: [
-      "KiCAD",
-      "Altium Designer",
       "LTSpice",
       "Schematic Design",
       "PCB Layout",
@@ -178,17 +177,18 @@ export const skills = [
   },
   {
     category: "Simulation & CAD",
+    // SOLIDWORKS removed — shown in logo strip
     items: [
       "NVIDIA Isaac Sim",
       "NVIDIA Isaac Lab",
-      "SOLIDWORKS",
       "Fusion 360",
       "Sim-to-Real Transfer",
     ],
   },
   {
     category: "Tools & DevOps",
-    items: ["Git", "Linux", "Docker (basic)", "STM32 Cube IDE", "Visual Studio Code", "Roboflow"],
+    // Git, Linux removed — shown in logo strip
+    items: ["Docker (basic)", "STM32 Cube IDE", "Visual Studio Code", "Roboflow"],
   },
 ];
 
@@ -204,6 +204,14 @@ export type Project = {
   homepageFeatured: boolean;
   github: string;
   period: string;
+  // ── MIT inverted-pyramid fields (optional; sections render only when present) ──
+  outcome?: string;              // punchy lead: what was built + result + my part
+  projectType?: string;          // e.g. "Capstone", "Industry", "Competition", "Coursework"
+  role?: string;                 // my specific role on the project
+  teamSize?: string;             // e.g. "Solo", "Team of 4"
+  duration?: string;             // e.g. "10 months"
+  contributions?: string[];      // what *I* did — strong action verbs
+  gallery?: { caption: string }[]; // captioned image slots (drop images in public/projects/<slug>/)
 };
 
 export const projects: Project[] = [
@@ -211,6 +219,23 @@ export const projects: Project[] = [
     slug: "uav-ugv-system",
     title: "Transformable Hybrid UAV-UGV System",
     subtitle: "Capstone / Final Year Project",
+    outcome:
+      "Built a robot that flies as a drone, then drives on the ground, to find survivors in earthquake rubble. I led the perception system — a custom AI vision model that detects people and hazards on-device at 28 FPS.",
+    projectType: "Capstone — Final Year Project",
+    role: "Perception & Systems Integration Lead",
+    teamSize: "Team of 3",
+    duration: "Aug 2025 – Apr 2026",
+    contributions: [
+      "Trained and deployed a custom object-detection model (Roboflow + TensorRT) reaching 28 FPS on an embedded NVIDIA Jetson",
+      "Architected the ROS2 mission state machine governing UAV↔UGV mode transitions and goal-directed navigation",
+      "Integrated multi-sensor fusion (camera, IMU, proximity) into a unified 3D occupancy map for hazard localisation",
+      "Validated detection reliability to 8 m range through staged rubble field trials",
+    ],
+    gallery: [
+      { caption: "Platform in UAV (aerial) configuration during flight test" },
+      { caption: "Ground (UGV) mode traversing simulated rubble" },
+      { caption: "Live object-detection overlay identifying a survivor target" },
+    ],
     shortDescription:
       "Multi-modal robotic platform capable of switching between aerial and ground modes for post-earthquake search and rescue, powered by ROS2 and a custom-trained AI vision model.",
     fullDescription:
@@ -239,6 +264,23 @@ export const projects: Project[] = [
     slug: "bipedal-humanoid-leg",
     title: "Bipedal Humanoid Robot Leg",
     subtitle: "General Magic (Thailand) Co., Ltd",
+    outcome:
+      "Designed the complete electrical and firmware system for a 12-joint humanoid robot leg at a robotics company. All 12 motors talk over one CAN Bus network with sub-millisecond latency, and the same control code runs in both simulation and on real hardware.",
+    projectType: "Industry — Joint Academic-Industry Initiative",
+    role: "Electrical & Firmware Engineer",
+    teamSize: "Team of 4",
+    duration: "Jun 2025 – Mar 2026",
+    contributions: [
+      "Designed 3 custom PCBs in KiCAD — power distribution (48 V→5/3.3 V), CAN hub, and sensor aggregation boards",
+      "Implemented STM32 firmware running 1 kHz torque/position control loops per joint",
+      "Built the SocketCAN communication layer carrying all 12 joints on a single 1 Mbps ISO CAN bus with heartbeat fault detection",
+      "Enabled sim-to-real transfer by matching the Isaac Sim URDF to real Cubemars actuator dynamics via the ROS2 Control hardware interface",
+    ],
+    gallery: [
+      { caption: "Assembled 12-DOF leg on the test rig" },
+      { caption: "Custom power-distribution PCB (KiCAD layout)" },
+      { caption: "Isaac Sim model used for sim-to-real policy transfer" },
+    ],
     shortDescription:
       "Full electrical system design for a 12-DOF humanoid robot leg using CAN Bus, SocketCAN, ROS2 Control, and custom STM32 firmware, with sim-to-real validation in NVIDIA Isaac Sim.",
     fullDescription:
@@ -267,6 +309,22 @@ export const projects: Project[] = [
     slug: "leaf-collector-robot",
     title: "Autonomous Leaf Collecting Robot",
     subtitle: "Adaptive Feedback Control Loop",
+    outcome:
+      "Built an outdoor robot that drives itself around a garden collecting leaves — no GPS. I designed the custom PCB that bridges the high-level ROS computer to the low-level motor controller, and the Kalman Filter that keeps it on course over bumpy terrain.",
+    projectType: "Coursework — Mobile Robotics",
+    role: "Hardware & Control",
+    teamSize: "Team of 3",
+    duration: "2023",
+    contributions: [
+      "Designed a custom 2-layer KiCAD PCB bridging ROS1 (Raspberry Pi) and an ATMega328P motor controller",
+      "Implemented an Extended Kalman Filter in C++ fusing wheel odometry with IMU for drift-free heading",
+      "Tuned the Ackermann low-level steering loop and reactive ultrasonic obstacle avoidance",
+    ],
+    gallery: [
+      { caption: "Robot collecting leaves during an outdoor run" },
+      { caption: "Custom ROS-to-MCU bridge PCB" },
+      { caption: "EKF localisation vs raw odometry trajectory plot" },
+    ],
     shortDescription:
       "Outdoor autonomous robot with Ackermann steering, custom ROS1-to-ATMega328P bridging PCB, Extended Kalman Filter, and dead reckoning for reliable navigation in unstructured garden environments.",
     fullDescription:
@@ -295,6 +353,22 @@ export const projects: Project[] = [
     slug: "unitree-a1-ddpg",
     title: "Unitree A1 Robot Dog — Sim-to-Real",
     subtitle: "DDPG Reinforcement Learning",
+    outcome:
+      "Taught a four-legged robot to walk using reinforcement learning — entirely in simulation — then transferred the learned policy onto the real Unitree A1, where it produced a stable trotting gait.",
+    projectType: "Coursework — Reinforcement Learning",
+    role: "Solo project",
+    teamSize: "Solo",
+    duration: "2024",
+    contributions: [
+      "Implemented a DDPG actor-critic agent in PyTorch outputting 12-DOF joint torques",
+      "Shaped a multi-term reward (velocity tracking, torque, stability, foot-slip) with curriculum learning over terrain roughness",
+      "Applied domain randomisation to bridge the reality gap and deployed the policy on the A1's onboard compute",
+    ],
+    gallery: [
+      { caption: "Training rollouts in NVIDIA Isaac Sim" },
+      { caption: "Reward curve across 2M training steps" },
+      { caption: "Policy running on the physical Unitree A1" },
+    ],
     shortDescription:
       "Locomotion policy for a Unitree A1 quadruped trained with Deep Deterministic Policy Gradient (DDPG) in NVIDIA Isaac Sim and transferred to real hardware.",
     fullDescription:
@@ -323,6 +397,21 @@ export const projects: Project[] = [
     slug: "omnidirectional-robot",
     title: "Large-Scale Omnidirectional Mobile Robot",
     subtitle: "Offline SLAM with ROS",
+    outcome:
+      "Built a large (1.2 m) Mecanum-wheel robot that can move in any direction and maps big indoor spaces autonomously, achieving centimetre-level positioning across 200 m+ runs.",
+    projectType: "Coursework — Mobile Robots",
+    role: "Software & Kinematics",
+    teamSize: "Team of 4",
+    duration: "2024",
+    contributions: [
+      "Derived and coded the holonomic Mecanum kinematics from scratch in C++",
+      "Built the ROS offline SLAM pipeline (2D LiDAR + Gmapping) with ICP loop-closure to remove drift",
+      "Integrated odometry, scan-matching, and navigation into a coordinated multi-node ROS system",
+    ],
+    gallery: [
+      { caption: "Omnidirectional platform with Mecanum wheels" },
+      { caption: "Generated occupancy-grid map of the test hall" },
+    ],
     shortDescription:
       "Large-scale omnidirectional platform using Mecanum wheels with offline SLAM for autonomous indoor mapping and navigation in complex warehouse-scale environments.",
     fullDescription:
@@ -347,6 +436,22 @@ export const projects: Project[] = [
     slug: "drawing-robot",
     title: "Cartesian Drawing Robot",
     subtitle: "K-Engineering World Tour 2024 — Most Innovative Project Award",
+    outcome:
+      "Built a robot that turns any portrait photo into a hand-drawn pencil sketch. It won the Most Innovative Project Award at K-Engineering World Tour 2024. My vision-to-G-code pipeline cut pen-travel time by over 60%.",
+    projectType: "Competition — Award Winner",
+    role: "Vision Pipeline & Software",
+    teamSize: "Team of 4",
+    duration: "2023",
+    contributions: [
+      "Built the OpenCV pipeline (edge detection, tone mapping, contour extraction) converting photos into stroke sets",
+      "Designed a custom DFS path optimiser that reduced total pen-up travel by 60% vs naive ordering",
+      "Generated GRBL-compatible G-code toolpaths driving the XY Cartesian motion system",
+    ],
+    gallery: [
+      { caption: "Robot mid-drawing on the competition floor" },
+      { caption: "Source photo vs robot-rendered output" },
+      { caption: "Award presentation at K-Engineering World Tour 2024" },
+    ],
     shortDescription:
       "Award-winning Cartesian robot that converts portrait photographs into G-code using OpenCV and a DFS path-planning algorithm, then renders photorealistic pencil drawings autonomously.",
     fullDescription:
@@ -371,6 +476,21 @@ export const projects: Project[] = [
     slug: "vandalism-detection-tinyml",
     title: "Vandalism Detection with TinyML",
     subtitle: "Edge AI on Microcontroller",
+    outcome:
+      "Shrank a vandalism-detection neural network small enough to run directly on a microcontroller — 15 FPS inference under 250 mW, with no cloud connection needed.",
+    projectType: "Coursework — Embedded ML",
+    role: "Solo project",
+    teamSize: "Solo",
+    duration: "2023",
+    contributions: [
+      "Trained a MobileNet-style depthwise-separable CNN on a self-collected, annotated dataset",
+      "Quantised the model to INT8 (TensorFlow Lite), shrinking it 2.1 MB → 540 KB with <2% accuracy loss",
+      "Deployed to an ARM Cortex-M4 with CMSIS-NN acceleration and an interrupt-driven capture pipeline",
+    ],
+    gallery: [
+      { caption: "Microcontroller running live on-device inference" },
+      { caption: "Model size / accuracy before vs after quantisation" },
+    ],
     shortDescription:
       "Real-time vandalism detection system using a quantised CNN deployed directly on an embedded microcontroller via TinyML, enabling on-device inference without cloud dependency.",
     fullDescription:
@@ -395,6 +515,21 @@ export const projects: Project[] = [
     slug: "kira-robot-arm",
     title: "K.I.R.A — Kinematics Integrated Robot Arm",
     subtitle: "MATLAB & Simulink",
+    outcome:
+      "Modelled and simulated a full 6-axis robot arm in MATLAB/Simulink — forward and inverse kinematics, reachable workspace, and smooth animated pick-and-place trajectories under PD control.",
+    projectType: "Coursework — Kinematics & Dynamics",
+    role: "Solo project",
+    teamSize: "Solo",
+    duration: "2023",
+    contributions: [
+      "Derived forward kinematics (DH + product-of-exponentials) and a closed-form wrist-partitioned inverse solver",
+      "Generated the reachable workspace via Monte Carlo joint-space sampling",
+      "Built a Simulink PD control model with gravity compensation and 3D animated playback",
+    ],
+    gallery: [
+      { caption: "Simulated arm executing a pick-and-place path" },
+      { caption: "3D reachable-workspace point cloud" },
+    ],
     shortDescription:
       "6-DOF robot arm simulation in MATLAB and Simulink covering forward/inverse kinematics, workspace analysis, trajectory planning, and animated motion verification.",
     fullDescription:
@@ -419,6 +554,21 @@ export const projects: Project[] = [
     slug: "attention-robot",
     title: "Attention Robot Prototype",
     subtitle: "NIT Sendai, Japan — Research Internship",
+    outcome:
+      "During a research internship in Japan, built an expressive safety robot that warns lab technicians of hazards — turning to face them with servo gestures, OLED facial expressions, and audio, all within 100 ms of a trigger.",
+    projectType: "Internship — Research (NIT Sendai, Japan)",
+    role: "Solo prototype build",
+    teamSize: "Solo (mentored)",
+    duration: "May – Jun 2025",
+    contributions: [
+      "Wrote bare-metal C++ on Arduino Mega with a state-machine architecture (IDLE/TRACKING/ALERT/RESET)",
+      "Integrated PIR, temperature, and ultrasonic sensors into filtered hazard-detection logic",
+      "Drove servo gestures and a 128×64 OLED face via a custom I2C bitmap rendering routine",
+    ],
+    gallery: [
+      { caption: "Attention robot prototype on the bench" },
+      { caption: "OLED expression + servo alert sequence" },
+    ],
     shortDescription:
       "Expressive safety robot developed at NIT Sendai that alerts laboratory technicians to hazards using servo-actuated gestures, OLED facial expressions, and audio feedback in real time.",
     fullDescription:
@@ -443,6 +593,21 @@ export const projects: Project[] = [
     slug: "line-following-robot",
     title: "High-Speed Line Following Robot",
     subtitle: "YTU Rolympic Competition — 2nd Prize",
+    outcome:
+      "Designed a competition line-following robot from scratch — custom PCB, STM32 firmware, and a tightly tuned PID loop — that placed 2nd at the YTU Rolympic competition.",
+    projectType: "Competition — 2nd Prize",
+    role: "Full design (PCB, firmware, control)",
+    teamSize: "Team of 2",
+    duration: "2022 – 2023",
+    contributions: [
+      "Designed a compact 2-layer KiCAD PCB integrating STM32F103, dual H-bridge drivers, IR array, and 3S power",
+      "Wrote a 1 kHz PID control loop steering from the weighted IR sensor centroid",
+      "Tuned gains (Ziegler-Nichols + track-profile iteration) for oscillation-free high-speed cornering",
+    ],
+    gallery: [
+      { caption: "Finished robot on the competition track" },
+      { caption: "Custom STM32 PCB layout (KiCAD)" },
+    ],
     shortDescription:
       "Competition-grade line follower with a custom STM32 PCB chassis, 8-channel IR sensor array, and a finely tuned PID control loop achieving sub-100 ms lap times.",
     fullDescription:
@@ -489,18 +654,6 @@ export const certifications: {
     year: "2024",
     pdf: "/certificates/linux.pdf",
     image: "/certificates/linux.png",
-  },
-  {
-    name: "C++ for Robotics",
-    issuer: "The Construct",
-    year: "2024",
-    // pdf: "/certificates/cpp-robotics.pdf",
-  },
-  {
-    name: "Python for Robotics",
-    issuer: "The Construct",
-    year: "2024",
-    // pdf: "/certificates/python-robotics.pdf",
   },
   {
     name: "Getting Started with AI on Jetson Nano",

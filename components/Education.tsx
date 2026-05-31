@@ -33,8 +33,8 @@ export default function Education() {
                       width: "52px",
                       height: "52px",
                       borderRadius: "10px",
-                      background: logo ? logo.bg : "rgba(56,189,248,0.08)",
-                      border: logo ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(56,189,248,0.2)",
+                      background: logo ? logo.bg : "rgba(34,211,238,0.1)",
+                      border: logo ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(34,211,238,0.25)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -82,12 +82,15 @@ export default function Education() {
                       </div>
                       <span
                         style={{
-                          fontSize: "0.8rem",
-                          color: "var(--text-muted)",
-                          background: "var(--surface-2)",
-                          padding: "0.2rem 0.65rem",
-                          borderRadius: "999px",
-                          border: "1px solid var(--border)",
+                          fontSize: "0.78rem",
+                          fontFamily: "var(--font-mono, monospace)",
+                          fontWeight: 600,
+                          letterSpacing: "0.01em",
+                          color: "var(--primary)",
+                          background: "rgba(34,211,238,0.1)",
+                          padding: "0.3rem 0.75rem",
+                          borderRadius: "6px",
+                          border: "1px solid rgba(34,211,238,0.3)",
                           whiteSpace: "nowrap",
                         }}
                       >

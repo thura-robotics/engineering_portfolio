@@ -32,7 +32,9 @@ export default function PortfolioPage() {
         {/* Header */}
         <div
           style={{
-            background: `radial-gradient(ellipse at 20% 50%, rgba(56,189,248,0.06) 0%, transparent 60%), var(--bg)`,
+            background: `radial-gradient(ellipse at 20% 50%, rgba(37,99,235,0.12) 0%, transparent 60%),
+                         radial-gradient(ellipse at 80% 30%, rgba(34,197,94,0.08) 0%, transparent 55%),
+                         var(--bg)`,
             borderBottom: "1px solid var(--border)",
             padding: "3rem 1.5rem",
           }}

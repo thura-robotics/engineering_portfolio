@@ -1,22 +1,26 @@
 @import "tailwindcss";
 
-/* ── Color tokens ── swap these when the theme is finalised ── */
+/* ── Color tokens ── black + blue + green theme ── */
 :root {
-  --bg:          #0f172a;
-  --surface:     #1e293b;
-  --surface-2:   #273549;
-  --border:      #334155;
-  --primary:     #38bdf8;
-  --primary-dim: #0ea5e9;
-  --text:        #f1f5f9;
-  --text-muted:  #94a3b8;
-  --tag-bg:      #0c2a3f;
-  --tag-text:    #7dd3fc;
+  --bg:          #05080d;   /* near-black, slight blue       */
+  --surface:     #0c1521;   /* dark blue-black surface       */
+  --surface-2:   #13202f;   /* elevated surface              */
+  --border:      #1f3147;   /* dividers                      */
+  --primary:     #22d3ee;   /* cyan-blue accent / links      */
+  --primary-dim: #0ea5e9;   /* hover accent                  */
+  --text:        #eaf4f7;   /* near-white, cool tint         */
+  --text-muted:  #8aa0b3;   /* muted blue-grey               */
+  --tag-bg:      #0c2433;   /* tag background                */
+  --tag-text:    #7df0d8;   /* tag text (blue-green)         */
+
+  /* Signature gradients: blue → cyan → green */
+  --gradient:      linear-gradient(120deg, #2563eb 0%, #06b6d4 50%, #22c55e 100%);
+  --gradient-soft: linear-gradient(120deg, #3b82f6 0%, #22d3ee 50%, #4ade80 100%);
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono);
 }
 
 * {
@@ -30,8 +34,28 @@ html {
 body {
   background-color: var(--bg);
   color: var(--text);
-  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  font-family: var(--font-body, ui-sans-serif, system-ui, sans-serif);
   line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Headings use the playful display font */
+h1, h2, h3, h4, .section-heading {
+  font-family: var(--font-display, var(--font-body), sans-serif);
+  letter-spacing: -0.02em;
+}
+
+/* ── Gradient utilities ── */
+.gradient-text {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.gradient-bg {
+  background: var(--gradient);
 }
 
 ::-webkit-scrollbar { width: 6px; }
@@ -56,7 +80,7 @@ body {
   padding: 0.2rem 0.65rem;
   border-radius: 999px;
   letter-spacing: 0.02em;
-  border: 1px solid #1e4a6e;
+  border: 1px solid #1c3a4a;
 }
 
 .card {
@@ -68,16 +92,20 @@ body {
 
 .card:hover {
   border-color: var(--primary);
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.08);
+  box-shadow: 0 0 22px rgba(34, 211, 238, 0.12);
 }
 
 .section-heading {
   position: relative;
   display: inline-block;
   font-size: 1.875rem;
-  font-weight: 700;
-  color: var(--text);
+  font-weight: 800;
   margin-bottom: 2.5rem;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .section-heading::after {
@@ -85,8 +113,8 @@ body {
   position: absolute;
   left: 0;
   bottom: -8px;
-  width: 48px;
-  height: 3px;
-  background: var(--primary);
+  width: 56px;
+  height: 4px;
+  background: var(--gradient);
   border-radius: 2px;
 }

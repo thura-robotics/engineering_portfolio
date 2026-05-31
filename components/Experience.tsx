@@ -82,18 +82,21 @@ export default function Experience() {
                   <div style={{ textAlign: "right" }}>
                     <p
                       style={{
-                        fontSize: "0.82rem",
-                        color: "var(--text-muted)",
-                        background: "var(--surface-2)",
-                        padding: "0.2rem 0.65rem",
-                        borderRadius: "999px",
-                        border: "1px solid var(--border)",
+                        fontSize: "0.78rem",
+                        fontFamily: "var(--font-mono, monospace)",
+                        fontWeight: 600,
+                        letterSpacing: "0.01em",
+                        color: "var(--primary)",
+                        background: "rgba(34,211,238,0.1)",
+                        padding: "0.3rem 0.75rem",
+                        borderRadius: "6px",
+                        border: "1px solid rgba(34,211,238,0.3)",
                         whiteSpace: "nowrap",
                       }}
                     >
                       {exp.period}
                     </p>
-                    <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: "0.25rem" }}>
+                    <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: "0.4rem" }}>
                       {exp.location}
                     </p>
                   </div>

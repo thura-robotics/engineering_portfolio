@@ -43,54 +43,77 @@ export default function Contact() {
           Say Hello
         </a>
 
+        {/* Icon links — click to open */}
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "1rem",
-            textAlign: "left",
+            display: "flex",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            gap: "1.25rem",
           }}
         >
           {[
-            { icon: <Mail size={16} />, label: "Email", value: personalInfo.email, href: `mailto:${personalInfo.email}` },
-            { icon: <Phone size={16} />, label: "Phone", value: personalInfo.phone, href: `tel:${personalInfo.phone}` },
-            { icon: <MapPin size={16} />, label: "Location", value: personalInfo.location, href: undefined },
-            { icon: <GithubIcon size={16} />, label: "GitHub", value: "github.com/thura-robotics", href: personalInfo.github },
-            { icon: <LinkedinIcon size={16} />, label: "LinkedIn", value: "linkedin.com/in/thura-robotics", href: personalInfo.linkedin },
-          ].map(({ icon, label, value, href }) => (
-            <div
+            { icon: <Mail size={28} />, label: "Email", href: `mailto:${personalInfo.email}`, external: false },
+            { icon: <Phone size={28} />, label: "Phone", href: `tel:${personalInfo.phone}`, external: false },
+            { icon: <GithubIcon size={28} />, label: "GitHub", href: personalInfo.github, external: true },
+            { icon: <LinkedinIcon size={28} />, label: "LinkedIn", href: personalInfo.linkedin, external: true },
+          ].map(({ icon, label, href, external }) => (
+            <a
               key={label}
-              className="card"
-              style={{ padding: "1rem 1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}
+              href={href}
+              title={label}
+              aria-label={label}
+              target={external ? "_blank" : undefined}
+              rel={external ? "noopener noreferrer" : undefined}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "64px",
+                height: "64px",
+                borderRadius: "50%",
+                border: "1px solid var(--border)",
+                background: "var(--surface)",
+                color: "var(--primary)",
+                textDecoration: "none",
+                transition: "transform 0.2s, background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.background = "var(--primary)";
+                el.style.color = "var(--bg)";
+                el.style.borderColor = "var(--primary)";
+                el.style.transform = "translateY(-4px)";
+                el.style.boxShadow = "0 8px 22px rgba(34,211,238,0.25)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.background = "var(--surface)";
+                el.style.color = "var(--primary)";
+                el.style.borderColor = "var(--border)";
+                el.style.transform = "translateY(0)";
+                el.style.boxShadow = "none";
+              }}
             >
-              <span style={{ color: "var(--primary)", flexShrink: 0 }}>{icon}</span>
-              <div>
-                <p style={{ fontSize: "0.72rem", color: "var(--text-muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                  {label}
-                </p>
-                {href ? (
-                  <a
-                    href={href}
-                    target={href.startsWith("http") ? "_blank" : undefined}
-                    rel="noopener noreferrer"
-                    style={{
-                      fontSize: "0.85rem",
-                      color: "var(--text)",
-                      textDecoration: "none",
-                      wordBreak: "break-all",
-                    }}
-                    onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.color = "var(--primary)")}
-                    onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.color = "var(--text)")}
-                  >
-                    {value}
-                  </a>
-                ) : (
-                  <span style={{ fontSize: "0.85rem", color: "var(--text)" }}>{value}</span>
-                )}
-              </div>
-            </div>
+              {icon}
+            </a>
           ))}
         </div>
+
+        {/* Location (not a link) */}
+        <p
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.4rem",
+            marginTop: "2rem",
+            fontSize: "0.875rem",
+            color: "var(--text-muted)",
+          }}
+        >
+          <MapPin size={15} style={{ color: "var(--primary)" }} />
+          {personalInfo.location}
+        </p>
       </div>
     </section>
   );

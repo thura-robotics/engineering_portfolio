@@ -73,6 +73,9 @@ export default function Navbar() {
               color: "var(--primary)",
               letterSpacing: "-0.02em",
               textDecoration: "none",
+              whiteSpace: "nowrap",
+              fontFamily: "var(--font-display), sans-serif",
+              flexShrink: 0,
             }}
           >
             Thura Zaw
