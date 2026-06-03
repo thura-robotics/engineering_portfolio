@@ -2,7 +2,7 @@ import { projects } from "@/lib/data";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-const featuredSlugs = ["uav-ugv-system", "bipedal-humanoid-leg"];
+const featuredSlugs = ["omnidirectional-robot", "bipedal-humanoid-leg"];
 
 export default function FeaturedProjects() {
   const featured = projects.filter((p) => featuredSlugs.includes(p.slug));
@@ -68,7 +68,9 @@ export default function FeaturedProjects() {
                 <div
                   style={{
                     height: "200px",
-                    background: "linear-gradient(135deg, var(--surface-2) 0%, var(--surface) 100%)",
+                    background: project.heroImage
+                      ? `url(${project.heroImage}) center/cover no-repeat`
+                      : "linear-gradient(135deg, var(--surface-2) 0%, var(--surface) 100%)",
                     borderBottom: "1px solid var(--border)",
                     display: "flex",
                     alignItems: "center",
@@ -97,7 +99,7 @@ export default function FeaturedProjects() {
                   >
                     Featured
                   </span>
-                  <span style={{ opacity: 0.4 }}>Photo coming soon</span>
+                  {!project.heroImage && <span style={{ opacity: 0.4 }}>Photo coming soon</span>}
                 </div>
 
                 <div style={{ padding: "1.5rem", flex: 1, display: "flex", flexDirection: "column" }}>

@@ -3,9 +3,11 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { GithubIcon } from "@/components/SocialIcons";
+import { GithubIcon, YoutubeIcon } from "@/components/SocialIcons";
+import MediaFrame from "@/components/MediaFrame";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import katex from "katex";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -99,26 +101,25 @@ export default async function ProjectDetailPage({ params }: Props) {
 
           {/* ── 3. Hero visual ── */}
           <figure style={{ margin: "0 0 1rem" }}>
-            <div
-              style={{
-                width: "100%",
-                aspectRatio: "16 / 9",
-                background: "linear-gradient(135deg, var(--surface-2) 0%, var(--surface) 100%)",
-                border: "1px solid var(--border)",
-                borderRadius: "0.75rem",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "var(--text-muted)",
-                fontSize: "0.875rem",
-              }}
-            >
-              Hero image — coming soon
-            </div>
-            {galleryItems[0]?.caption && (
-              <figcaption style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: "0.6rem", textAlign: "center", fontStyle: "italic" }}>
-                {galleryItems[0].caption}
-              </figcaption>
+            {project.heroImage ? (
+              <MediaFrame src={project.heroImage} alt={project.title} aspectRatio="16 / 9" />
+            ) : (
+              <div
+                style={{
+                  width: "100%",
+                  aspectRatio: "16 / 9",
+                  background: "linear-gradient(135deg, var(--surface-2) 0%, var(--surface) 100%)",
+                  border: "1px solid var(--border)",
+                  borderRadius: "0.75rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "var(--text-muted)",
+                  fontSize: "0.875rem",
+                }}
+              >
+                Hero image — coming soon
+              </div>
             )}
           </figure>
 
@@ -158,9 +159,12 @@ export default async function ProjectDetailPage({ params }: Props) {
           {/* ── 6. Context & Motivation ── */}
           <section style={{ marginBottom: "2.5rem" }}>
             <h2 style={sectionHeading}>Context &amp; Motivation</h2>
-            <p style={{ color: "var(--text-muted)", lineHeight: 1.85, fontSize: "0.95rem" }}>
+            <p style={{ color: "var(--text-muted)", lineHeight: 1.85, fontSize: "0.95rem", marginBottom: project.contextImage ? "1.25rem" : 0 }}>
               {project.fullDescription}
             </p>
+            {project.contextImage && (
+              <MediaFrame src={project.contextImage} alt="Context image" aspectRatio="16 / 7" radius="0.5rem" />
+            )}
           </section>
 
           {/* ── 7. My Contributions ── */}
@@ -175,6 +179,11 @@ export default async function ProjectDetailPage({ params }: Props) {
                   </li>
                 ))}
               </ul>
+              {project.teamImage && (
+                <div style={{ marginTop: "1.5rem" }}>
+                  <MediaFrame src={project.teamImage} alt="Team members" aspectRatio="16 / 7" radius="0.5rem" />
+                </div>
+              )}
             </section>
           )}
 
@@ -200,6 +209,83 @@ export default async function ProjectDetailPage({ params }: Props) {
                     <p style={{ color: "var(--text-muted)", fontSize: "0.875rem", lineHeight: 1.8 }}>
                       {detail.body}
                     </p>
+                    {detail.equations && detail.equations.map((tex, e) => (
+                      <div
+                        key={e}
+                        style={{ overflowX: "auto", padding: "0.75rem 0", textAlign: "center" }}
+                        dangerouslySetInnerHTML={{
+                          __html: katex.renderToString(tex, { displayMode: true, throwOnError: false }),
+                        }}
+                      />
+                    ))}
+                    {/* Images (before sub-sections) */}
+                    {detail.images && detail.images.length > 0 && (
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: detail.imageColumns
+                            ? `repeat(${detail.imageColumns}, 1fr)`
+                            : "repeat(auto-fit, minmax(220px, 1fr))",
+                          gap: "0.85rem",
+                          marginTop: "1.25rem",
+                        }}
+                      >
+                        {detail.images.map((img, j) => (
+                          <figure key={j} style={{ margin: 0 }}>
+                            <MediaFrame
+                              src={img.src}
+                              alt={img.caption}
+                              aspectRatio="4 / 3"
+                              radius="0.4rem"
+                              objectFit={detail.imageFit ?? "contain"}
+                            />
+                            {img.caption && (
+                              <figcaption style={{ fontSize: "0.73rem", color: "var(--text-muted)", marginTop: "0.4rem", lineHeight: 1.45 }}>
+                                {img.caption}
+                              </figcaption>
+                            )}
+                          </figure>
+                        ))}
+                      </div>
+                    )}
+                    {/* Sub-sections (e.g. Firmware Integration, Forward / Inverse Kinematics) */}
+                    {detail.subSections && detail.subSections.length > 0 && (
+                      <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", marginTop: "1.5rem" }}>
+                        {detail.subSections.map((sub, s) => (
+                          <div key={s} style={{ borderTop: "1px solid var(--border)", paddingTop: "1.25rem" }}>
+                            <h4 style={{ fontSize: "0.82rem", fontWeight: 700, color: "var(--text)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "0.6rem" }}>
+                              {sub.heading}
+                            </h4>
+                            <p style={{ color: "var(--text-muted)", fontSize: "0.85rem", lineHeight: 1.8, marginBottom: sub.equations?.length ? "1rem" : 0 }}>
+                              {sub.body}
+                            </p>
+                            {sub.equations && sub.equations.map((tex, e) => (
+                              <div
+                                key={e}
+                                style={{ overflowX: "auto", padding: "0.75rem 0", textAlign: "center" }}
+                                dangerouslySetInnerHTML={{
+                                  __html: katex.renderToString(tex, { displayMode: true, throwOnError: false }),
+                                }}
+                              />
+                            ))}
+                            {sub.images && sub.images.length > 0 && (
+                              <div style={{ display: "grid", gridTemplateColumns: sub.imageColumns ? `repeat(${sub.imageColumns}, 1fr)` : "repeat(auto-fit, minmax(200px, 1fr))", gap: "0.85rem", marginTop: "1rem" }}>
+                                {sub.images.map((img, si) => (
+                                  <figure key={si} style={{ margin: 0 }}>
+                                    <MediaFrame src={img.src} alt={img.caption} aspectRatio="4 / 3" radius="0.4rem" objectFit={sub.imageFit ?? "contain"} />
+                                    {img.caption && (
+                                      <figcaption style={{ fontSize: "0.73rem", color: "var(--text-muted)", marginTop: "0.4rem", lineHeight: 1.45 }}>
+                                        {img.caption}
+                                      </figcaption>
+                                    )}
+                                  </figure>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -212,21 +298,30 @@ export default async function ProjectDetailPage({ params }: Props) {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1rem" }} className="gallery-grid">
               {galleryItems.map((item, n) => (
                 <figure key={n} style={{ margin: 0 }}>
-                  <div
-                    style={{
-                      aspectRatio: "4/3",
-                      background: "var(--surface)",
-                      border: "1px solid var(--border)",
-                      borderRadius: "0.5rem",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "var(--text-muted)",
-                      fontSize: "0.75rem",
-                    }}
-                  >
-                    Photo {n + 1}
-                  </div>
+                  {item.src ? (
+                    <MediaFrame
+                      src={item.src}
+                      alt={item.caption || `${project.title} photo ${n + 1}`}
+                      aspectRatio="4 / 3"
+                      radius="0.5rem"
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        aspectRatio: "4/3",
+                        background: "var(--surface)",
+                        border: "1px solid var(--border)",
+                        borderRadius: "0.5rem",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "var(--text-muted)",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      Photo {n + 1}
+                    </div>
+                  )}
                   {item.caption && (
                     <figcaption style={{ fontSize: "0.78rem", color: "var(--text-muted)", marginTop: "0.5rem", lineHeight: 1.45 }}>
                       {item.caption}
@@ -237,28 +332,60 @@ export default async function ProjectDetailPage({ params }: Props) {
             </div>
           </section>
 
-          {/* ── 10. GitHub ── */}
-          <div style={{ borderTop: "1px solid var(--border)", paddingTop: "1.75rem", display: "flex", justifyContent: "center" }}>
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.6rem",
-                padding: "0.7rem 1.75rem",
-                border: "1px solid var(--border)",
-                borderRadius: "0.5rem",
-                color: "var(--text)",
-                textDecoration: "none",
-                fontWeight: 600,
-                fontSize: "0.9rem",
-                background: "var(--surface)",
-              }}
-            >
-              <GithubIcon size={18} /> View on GitHub
-            </a>
+          {/* ── 10. Links (GitHub + YouTube) ── */}
+          <div style={{ borderTop: "1px solid var(--border)", paddingTop: "2rem", display: "flex", justifyContent: "center", gap: "1.25rem" }}>
+            {[
+              { label: "View on GitHub", href: project.github, icon: <GithubIcon size={26} /> },
+              { label: "Watch Demo", href: project.youtube, icon: <YoutubeIcon size={26} /> },
+            ].map(({ label, href, icon }) =>
+              href ? (
+                <a
+                  key={label}
+                  href={href}
+                  title={label}
+                  aria-label={label}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="proj-link"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "60px",
+                    height: "60px",
+                    borderRadius: "50%",
+                    border: "1px solid var(--border)",
+                    background: "var(--surface)",
+                    color: "var(--primary)",
+                    textDecoration: "none",
+                    transition: "transform 0.2s, background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s",
+                  }}
+                >
+                  {icon}
+                </a>
+              ) : (
+                <span
+                  key={label}
+                  title={`${label} — link coming soon`}
+                  aria-label={`${label} — coming soon`}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "60px",
+                    height: "60px",
+                    borderRadius: "50%",
+                    border: "1px dashed var(--border)",
+                    background: "transparent",
+                    color: "var(--text-muted)",
+                    opacity: 0.4,
+                    cursor: "not-allowed",
+                  }}
+                >
+                  {icon}
+                </span>
+              )
+            )}
           </div>
         </div>
       </main>
@@ -267,6 +394,13 @@ export default async function ProjectDetailPage({ params }: Props) {
         @media (max-width: 640px) {
           .gallery-grid { grid-template-columns: 1fr !important; }
           .facts-strip { grid-template-columns: 1fr 1fr !important; }
+        }
+        .proj-link:hover {
+          background: var(--primary) !important;
+          color: var(--bg) !important;
+          border-color: var(--primary) !important;
+          transform: translateY(-4px);
+          box-shadow: 0 8px 22px rgba(34,211,238,0.25);
         }
       `}</style>
     </>

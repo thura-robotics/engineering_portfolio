@@ -94,18 +94,52 @@ export default function PortfolioPage() {
                         {/* Thumbnail */}
                         <div
                           style={{
+                            position: "relative",
                             height: "160px",
-                            background: "linear-gradient(135deg, var(--surface-2) 0%, var(--surface) 100%)",
+                            overflow: "hidden",
                             borderBottom: "1px solid var(--border)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            color: "var(--text-muted)",
-                            fontSize: "0.75rem",
-                            opacity: 0.5,
+                            background: "var(--surface-2)",
+                            flexShrink: 0,
                           }}
                         >
-                          Photo coming soon
+                          {project.heroImage ? (
+                            <>
+                              {/* Blurred backdrop — fills bars for wide composites */}
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={project.heroImage}
+                                alt=""
+                                aria-hidden="true"
+                                style={{
+                                  position: "absolute", inset: 0,
+                                  width: "100%", height: "100%",
+                                  objectFit: "cover",
+                                  filter: "blur(18px) brightness(0.45) saturate(1.1)",
+                                  transform: "scale(1.15)",
+                                }}
+                              />
+                              {/* Foreground — full image, always visible */}
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={project.heroImage}
+                                alt={project.title}
+                                style={{
+                                  position: "absolute", inset: 0,
+                                  width: "100%", height: "100%",
+                                  objectFit: "contain",
+                                }}
+                              />
+                            </>
+                          ) : (
+                            <div style={{
+                              position: "absolute", inset: 0,
+                              background: "linear-gradient(135deg, var(--surface-2) 0%, var(--surface) 100%)",
+                              display: "flex", alignItems: "center", justifyContent: "center",
+                              color: "var(--text-muted)", fontSize: "0.75rem", opacity: 0.5,
+                            }}>
+                              Photo coming soon
+                            </div>
+                          )}
                         </div>
 
                         <div style={{ padding: "1.25rem", flex: 1, display: "flex", flexDirection: "column" }}>

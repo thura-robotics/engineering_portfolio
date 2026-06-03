@@ -27,6 +27,17 @@
   box-sizing: border-box;
 }
 
+/* ── Lightweight image-save deterrent ── */
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none; /* disables iOS long-press save menu */
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -118,3 +129,8 @@ h1, h2, h3, h4, .section-heading {
   background: var(--gradient);
   border-radius: 2px;
 }
+
+/* ── KaTeX equation sizing — match body text scale ── */
+.katex { font-size: 0.72em !important; }
+.katex-display { margin: 0.4em 0 !important; }
+.katex-display > .katex { font-size: 0.7em !important; }

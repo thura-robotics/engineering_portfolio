@@ -1,4 +1,5 @@
 import { personalInfo } from "@/lib/data";
+import PhotoLightbox from "@/components/PhotoLightbox";
 
 export default function About() {
   return (
@@ -14,66 +15,79 @@ export default function About() {
           }}
           className="about-grid"
         >
-          <div>
-            {personalInfo.bio.split("\n\n").map((para, i) => (
-              <p
-                key={i}
-                style={{
-                  color: "var(--text-muted)",
-                  lineHeight: 1.85,
-                  marginBottom: "1.25rem",
-                  fontSize: "0.95rem",
-                }}
-              >
-                {para}
-              </p>
-            ))}
+          {/* ── Left: personal photo (lightbox on click) ── */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+            <PhotoLightbox
+              thumbnail="/projects/TA_portrait.png"
+              fullSrc="/projects/TA.png"
+              alt="Thura Zaw — Teaching Assistant"
+              caption="Teaching Kirchhoff's Laws as a Teaching Assistant at KMITL"
+            />
           </div>
 
-          <div
-            style={{
-              background: "var(--surface-2)",
-              border: "1px solid var(--border)",
-              borderRadius: "0.75rem",
-              padding: "1.5rem",
-            }}
-          >
-            <h3
+          {/* ── Right: bio + quick facts ── */}
+          <div>
+            <div style={{ marginBottom: "2rem" }}>
+              {personalInfo.bio.split("\n\n").map((para, i) => (
+                <p
+                  key={i}
+                  style={{
+                    color: "var(--text-muted)",
+                    lineHeight: 1.85,
+                    marginBottom: "1.25rem",
+                    fontSize: "0.95rem",
+                  }}
+                >
+                  {para}
+                </p>
+              ))}
+            </div>
+
+            <div
               style={{
-                fontSize: "0.8rem",
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "var(--primary)",
-                marginBottom: "1rem",
+                background: "var(--surface-2)",
+                border: "1px solid var(--border)",
+                borderRadius: "0.75rem",
+                padding: "1.5rem",
               }}
             >
-              Quick Facts
-            </h3>
-            {[
-              { label: "Degree", value: "B.Eng — Robotics & AI" },
-              { label: "University", value: "KMITL, Bangkok" },
-              { label: "GPA", value: "3.7 / 4.0 · First Class Honours" },
-              { label: "Graduating", value: "April 2026" },
-              { label: "Location", value: personalInfo.location },
-              { label: "Languages", value: "English, Japanese" },
-              { label: "Interests", value: "Guitar, Chess, Novels, Gym" },
-            ].map(({ label, value }) => (
-              <div
-                key={label}
+              <h3
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  gap: "1rem",
-                  padding: "0.5rem 0",
-                  borderBottom: "1px solid var(--border)",
-                  fontSize: "0.875rem",
+                  fontSize: "0.8rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "var(--primary)",
+                  marginBottom: "1rem",
                 }}
               >
-                <span style={{ color: "var(--text-muted)", flexShrink: 0 }}>{label}</span>
-                <span style={{ color: "var(--text)", textAlign: "right" }}>{value}</span>
-              </div>
-            ))}
+                Quick Facts
+              </h3>
+              {[
+                { label: "Degree", value: "B.Eng — Robotics & AI" },
+                { label: "University", value: "KMITL, Bangkok" },
+                { label: "GPA", value: "3.7 / 4.0 · First Class Honours" },
+                { label: "Graduating", value: "April 2026" },
+                { label: "Location", value: personalInfo.location },
+                { label: "Languages", value: "English, Japanese" },
+                { label: "Interests", value: "Guitar, Chess, Novels, Gym" },
+              ].map(({ label, value }) => (
+                <div
+                  key={label}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    gap: "1rem",
+                    padding: "0.5rem 0",
+                    borderBottom: "1px solid var(--border)",
+                    fontSize: "0.875rem",
+                  }}
+                >
+                  <span style={{ color: "var(--text-muted)", flexShrink: 0 }}>{label}</span>
+                  <span style={{ color: "var(--text)", textAlign: "right" }}>{value}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

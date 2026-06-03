@@ -37,8 +37,30 @@ export default function HardwareProjects() {
           <div
             key={i}
             className="card"
-            style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem" }}
+            style={{ overflow: "hidden", display: "flex", flexDirection: "column" }}
           >
+            {/* Thumbnail — blurred-fill, non-clickable */}
+            <div style={{ position: "relative", height: "160px", overflow: "hidden", background: "var(--surface-2)", flexShrink: 0, borderBottom: "1px solid var(--border)" }}>
+              {project.image ? (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={project.image} alt="" aria-hidden="true"
+                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "blur(18px) brightness(0.45) saturate(1.1)", transform: "scale(1.15)" }}
+                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={project.image} alt={project.title}
+                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain" }}
+                  />
+                </>
+              ) : (
+                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", fontSize: "0.75rem", opacity: 0.5 }}>
+                  Photo coming soon
+                </div>
+              )}
+            </div>
+
+            {/* Card body */}
+            <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem", flex: 1 }}>
             {/* Icon + title row */}
             <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
               <div
@@ -110,6 +132,7 @@ export default function HardwareProjects() {
             >
               <ExternalLink size={14} /> Open PCB Viewer
             </a>
+            </div>{/* end card body */}
           </div>
         ))}
       </div>

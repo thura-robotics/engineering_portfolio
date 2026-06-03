@@ -198,11 +198,27 @@ export type Project = {
   subtitle: string;
   shortDescription: string;
   fullDescription: string;
-  technicalDetails: { heading: string; body: string }[];
+  technicalDetails: {
+    heading: string;
+    body: string;
+    equations?: string[];   // KaTeX display-mode TeX strings
+    images?: { src: string; caption: string }[];
+    imageColumns?: number;  // fixed column count (default: auto-fit)
+    imageFit?: "contain" | "cover"; // default: contain
+    subSections?: {
+      heading: string;
+      body: string;
+      equations?: string[];
+      images?: { src: string; caption: string }[];
+      imageColumns?: number;
+      imageFit?: "contain" | "cover";
+    }[];
+  }[];
   tags: string[];
   portfolioCategory: "Robotics & Embedded" | "AI & Computer Vision";
   homepageFeatured: boolean;
-  github: string;
+  github?: string;               // per-project repo link (optional until provided)
+  youtube?: string;              // per-project demo video link (optional until provided)
   period: string;
   // ── MIT inverted-pyramid fields (optional; sections render only when present) ──
   outcome?: string;              // punchy lead: what was built + result + my part
@@ -211,7 +227,10 @@ export type Project = {
   teamSize?: string;             // e.g. "Solo", "Team of 4"
   duration?: string;             // e.g. "10 months"
   contributions?: string[];      // what *I* did — strong action verbs
-  gallery?: { caption: string }[]; // captioned image slots (drop images in public/projects/<slug>/)
+  teamImage?: string;            // optional team photo shown below contributions
+  contextImage?: string;         // optional image shown below Context & Motivation text
+  heroImage?: string;            // large banner image, e.g. "/projects/<slug>/hero.jpg"
+  gallery?: { src?: string; caption: string }[]; // image slots; drop files in public/projects/<slug>/
 };
 
 export const projects: Project[] = [
@@ -256,7 +275,7 @@ export const projects: Project[] = [
     ],
     tags: ["ROS2", "Computer Vision", "Roboflow", "UAV", "UGV", "NVIDIA Jetson", "Search & Rescue", "Sensor Fusion"],
     portfolioCategory: "Robotics & Embedded",
-    homepageFeatured: true,
+    homepageFeatured: false,
     github: "https://github.com/thura-robotics",
     period: "2025 – 2026",
   },
@@ -276,10 +295,18 @@ export const projects: Project[] = [
       "Built the SocketCAN communication layer carrying all 12 joints on a single 1 Mbps ISO CAN bus with heartbeat fault detection",
       "Enabled sim-to-real transfer by matching the Isaac Sim URDF to real Cubemars actuator dynamics via the ROS2 Control hardware interface",
     ],
+    heroImage: "/projects/bipedal/hero.jpg",
     gallery: [
-      { caption: "Assembled 12-DOF leg on the test rig" },
-      { caption: "Custom power-distribution PCB (KiCAD layout)" },
-      { caption: "Isaac Sim model used for sim-to-real policy transfer" },
+      { src: "/projects/bipedal/real/img49.jpg", caption: "The complete 12-DOF leg assembly suspended on the test rig" },
+      { src: "/projects/bipedal/real/img41.jpg", caption: "Custom distribution board routing power and CAN signals from the hip to each joint" },
+      { src: "/projects/bipedal/real/img97.jpg", caption: "Top mounting plate housing the IMU and the joint wiring harness" },
+      { src: "/projects/bipedal/real/img40.jpg", caption: "Cable-management routing through the hip actuators" },
+      { src: "/projects/bipedal/real/img63.jpg", caption: "Emergency-stop control box wired to the leg for safe bring-up testing" },
+      { src: "/projects/bipedal/real/img104.jpg", caption: "Team bring-up and calibration during a test session" },
+      { src: "/projects/bipedal/sim/img151.jpg", caption: "CAD front view of the leg structure with the hip actuator mounts" },
+      { src: "/projects/bipedal/sim/img182.jpg", caption: "CAD isometric view showing the full leg, knee joint, and actuator porting" },
+      { src: "/projects/bipedal/sim/img164.jpg", caption: "Sim-to-real validation environment in NVIDIA Isaac Sim" },
+      { src: "/projects/bipedal/sim/img143.jpg", caption: "Parallel reinforcement-learning rollouts training locomotion in Isaac Sim" },
     ],
     shortDescription:
       "Full electrical system design for a 12-DOF humanoid robot leg using CAN Bus, SocketCAN, ROS2 Control, and custom STM32 firmware, with sim-to-real validation in NVIDIA Isaac Sim.",
@@ -289,10 +316,20 @@ export const projects: Project[] = [
       {
         heading: "CAN Bus Communication",
         body: "All 12 joints communicate over a single 1 Mbps ISO CAN Bus network using the SocketCAN kernel module on a Linux-based host SBC. Custom CAN frames were designed for position, velocity, and torque commands with sub-millisecond round-trip latency. A heartbeat monitoring system detects and flags joint dropout in real time.",
+        images: [
+          { src: "/projects/pcbs/canbus_pcb.png", caption: "2D PCB layout of the custom CAN Bus communication board designed in KiCAD, showing trace routing for 6 motor driver channels." },
+          { src: "/projects/pcbs/canbus_3d.png",  caption: "3D render of the CAN Bus PCB with motor driver ICs, bulk capacitors, and XT30 power connector populated." },
+          { src: "/projects/pcbs/canbus_real.jpg", caption: "Two fabricated and assembled CAN Bus boards side-by-side — left leg and right leg units ready for integration." },
+        ],
       },
       {
-        heading: "PCB Design",
+        heading: "Power Distribution Board (PDB)",
         body: "Three custom PCBs were designed in KiCAD: a power distribution board (PDB) managing 48 V to 5/3.3 V conversion, a CAN hub board with daisy-chained transceivers, and a sensor aggregation board consolidating encoder and IMU data. Thermal analysis was performed in LTSpice to validate power stage designs under peak load conditions.",
+        images: [
+          { src: "/projects/pcbs/pwd_pcb.png",  caption: "2D KiCAD layout of the PDB showing 6 regulated output channels, buck converter circuits, and high-current power input pads." },
+          { src: "/projects/pcbs/pwd_3d.png",   caption: "3D render of the assembled PDB with bulk electrolytic capacitors, 6-channel screw terminal outputs, and XT60 main power connectors." },
+          { src: "/projects/pcbs/pwd_real.jpg", caption: "Fabricated and assembled PDB on the bench, with four large bulk capacitors and screw terminals wired to the motor driver rails." },
+        ],
       },
       {
         heading: "Sim-to-Real Workflow",
@@ -316,9 +353,9 @@ export const projects: Project[] = [
     teamSize: "Team of 3",
     duration: "2023",
     contributions: [
-      "Designed a custom 2-layer KiCAD PCB bridging ROS1 (Raspberry Pi) and an ATMega328P motor controller",
-      "Implemented an Extended Kalman Filter in C++ fusing wheel odometry with IMU for drift-free heading",
-      "Tuned the Ackermann low-level steering loop and reactive ultrasonic obstacle avoidance",
+      "Designed the full mechanical system in SOLIDWORKS — Mars rover-inspired rocker-bogie suspension, Ackermann front steering linkage, centrifugal blower assembly, and aluminium extrusion chassis",
+      "Built the high-level AI processing pipeline: WebSocket server offloading SAM-style segmentation to a remote AI server, point-prompt grid generation, mask-to-direction command conversion, and ROS1 integration on Raspberry Pi",
+      "Implemented an Extended Kalman Filter in C++ fusing wheel encoder odometry with a 6-axis IMU for drift-free pose estimation on uneven terrain",
     ],
     gallery: [
       { caption: "Robot collecting leaves during an outdoor run" },
@@ -331,16 +368,34 @@ export const projects: Project[] = [
       "Designed as a practical application of mobile robotics principles, this outdoor robot autonomously collects fallen leaves from garden surfaces. The vehicle adopts an Ackermann steering geometry suited for smooth outdoor terrain. A custom-designed PCB acts as the hardware bridge between a high-level ROS1 Noetic stack running on a Raspberry Pi and the low-level ATMega328P microcontroller responsible for motor driver PWM, encoder reading, and servo actuation. An Extended Kalman Filter fuses wheel odometry with IMU measurements for reliable pose estimation without GPS. A reactive obstacle avoidance layer built on ultrasonic sensor feedback prevents collisions with garden furniture and irregular terrain features.",
     technicalDetails: [
       {
-        heading: "Custom PCB Bridge",
-        body: "The PCB was designed in KiCAD and fabricated with a 2-layer layout. It houses a TTL-to-USB serial bridge, motor driver MOSFETs, an I2C bus for IMU communication, and a dedicated 5 V regulator for logic-level isolation. The design ensures electrical noise from the motor drivers does not corrupt serial communication with the ROS host.",
+        heading: "Mechanical Design",
+        body: "The robot chassis is built on an aluminium extrusion frame with a transparent acrylic collection box mounted centrally. The front sensor panel integrates a webcam at the top, twin ultrasonic sensors flanking the sides for obstacle detection, and a large circular intake opening connected to the curved inlet pipe. The leaf-collection mechanism uses a centrifugal blower: a DC motor drives an impeller inside a scroll casing that generates the suction airflow drawing leaves up through the intake pipe and into the collection box. An Ackermann steering linkage mounted underneath the chassis drives the front wheels via a servo, providing smooth turning geometry for outdoor terrain. The side elevation shows the complete integration of blower motor, collection box, intake pipe, and steering assembly on the extruded aluminium base frame.",
+        images: [
+          { src: "/projects/leaf_collection/mec_1.jpg", caption: "Front sensor panel showing the webcam, dual ultrasonic sensors, and the circular intake opening with inlet pipe." },
+          { src: "/projects/leaf_collection/mec_2.jpg", caption: "Exploded blower assembly: centrifugal impeller (left), scroll volute casing (centre), and DC drive motor (right)." },
+          { src: "/projects/leaf_collection/mec_3.jpg", caption: "Side elevation of the full robot showing the Ackermann steering linkage, blower unit, collection box, and curved intake pipe on the aluminium extrusion frame." },
+        ],
       },
       {
-        heading: "Extended Kalman Filter",
-        body: "An EKF was implemented in C++ to fuse wheel encoder odometry with a 6-axis IMU. The state vector tracks 2D position, heading, and linear/angular velocity. The filter handles wheel slip during acceleration and recovers accurate heading estimates on uneven terrain where encoder-only dead reckoning would diverge.",
+        heading: "MARS Rover-Inspired Mechanisms",
+        body: "The drivetrain draws from NASA Mars rover engineering, combining two classical mechanisms for reliable outdoor traversal. The Ackermann steering geometry governs the front wheel angles: during a turn, the inner wheel steers at a greater angle (θ_in) than the outer wheel (θ_out) so both front wheels trace concentric arcs around a common turning centre at radius R, eliminating tyre scrubbing on grass and uneven garden surfaces. The turning radius and individual wheel velocities (V_in, V_out) are derived analytically from the commanded steering angle θ and wheelbase geometry. The suspension adopts a passive rocker-bogie linkage: the rocker arm pivots about the chassis centre, coupling the front and rear wheel pods so that when one wheel rises over an obstacle — a garden step, root, or soil ridge — the opposing arm descends, keeping all wheels in ground contact without any actuator. The six-wheel layout (two servo-steered front, two mid-driven, two rear-driven) distributes weight evenly across terrain. The rocker-bogie arms are 3D-printed in PLA for rapid iteration and mounted to an aluminium extrusion base frame.",
+        images: [
+          { src: "/projects/leaf_collection/acker_1.jpg", caption: "Ackermann geometry diagram: inner/outer wheel angles θ_in and θ_out, turning radii R_in and R_out, and velocities V_in and V_out about the shared turning centre." },
+          { src: "/projects/leaf_collection/acker_2.jpg", caption: "Ackermann steering geometry overlaid on the rover CAD — differential front wheel angles α1 and α2 define turning radius R from the instantaneous centre of rotation." },
+          { src: "/projects/leaf_collection/rocker_0.jpg", caption: "Rocker-bogie concept: passive linkage keeps all wheels in contact across grass, soil, and raised step obstacles without active actuators." },
+          { src: "/projects/leaf_collection/rocker_1.jpg", caption: "SOLIDWORKS CAD of the full 6-wheel rocker-bogie chassis with aluminium extrusion frame and Ackermann front steering linkage." },
+          { src: "/projects/leaf_collection/rocker_2.jpg", caption: "Assembled chassis with 3D-printed white rocker-bogie arms, servo-actuated Ackermann steering, and rubber-tyred wheels ready for outdoor trials." },
+        ],
       },
       {
-        heading: "ROS1 Navigation Stack",
-        body: "The robot uses a customised ROS1 Noetic navigation stack with a hand-tuned local planner for narrow garden path traversal. A simple occupancy grid built from ultrasonic sensor sweeps provides the cost map for reactive replanning when obstacles are detected mid-path.",
+        heading: "High Level Processing",
+        body: "The high-level processing pipeline runs on a Raspberry Pi and offloads the heavy computer vision workload to a remote AI server over WebSocket. The onboard camera streams frames to the server, which runs a universal segmentation model (SAM-style architecture): an image encoder converts the frame into dense embeddings, a prompt encoder accepts a structured grid of point prompts, and a lightweight mask decoder combines both to produce a binary segmentation mask and a per-pixel probability map. The point-prompt grid uniformly samples the camera image to identify navigable ground versus obstacles. The resulting mask is thresholded to extract a drive direction command which is transmitted back to the robot via WebSocket. In parallel, three ultrasonic sensors mounted on the robot chassis provide close-range obstacle detection and human proximity alerts, allowing the robot to stop or re-route independently of the AI server.",
+        images: [
+          { src: "/projects/leaf_collection/hi_lvl_sys.jpg",  caption: "High-level system overview: the AI server and robot exchange camera frames and drive direction commands over a WebSocket connection; ultrasonic sensors handle local obstacle and person detection." },
+          { src: "/projects/leaf_collection/seg_model.jpg",   caption: "Universal segmentation model architecture — image encoder produces embeddings fused with point/box/mask prompt inputs; a lightweight mask decoder outputs valid masks with confidence scores." },
+          { src: "/projects/leaf_collection/cv1.jpg",         caption: "Uniform point-prompt sampling grid overlaid on a garden scene — the blue dot array feeds foreground/background cues into the prompt encoder for ground segmentation." },
+          { src: "/projects/leaf_collection/cv2.jpg",         caption: "Segmentation pipeline output: original camera frame (left), binary ground mask (centre), and per-pixel probability map (right) used to compute the drive direction command." },
+        ],
       },
     ],
     tags: ["ROS1 Noetic", "EKF", "Ackermann Steering", "PCB Design", "ATMega328P", "Odometry", "KiCAD", "C++"],
@@ -348,6 +403,8 @@ export const projects: Project[] = [
     homepageFeatured: false,
     github: "https://github.com/thura-robotics",
     period: "2023",
+    heroImage: "/projects/leaf_collection/hero_composite.jpg",
+    teamImage: "/projects/leaf_collection/teams.png",
   },
   {
     slug: "unitree-a1-ddpg",
@@ -409,8 +466,15 @@ export const projects: Project[] = [
       "Integrated odometry, scan-matching, and navigation into a coordinated multi-node ROS system",
     ],
     gallery: [
-      { caption: "Omnidirectional platform with Mecanum wheels" },
-      { caption: "Generated occupancy-grid map of the test hall" },
+      { src: "/projects/slam_bot/cad_front_height.jpg",    caption: "Front elevation CAD view annotating the ~460 mm total robot height across the three-tier aluminium frame." },
+      { src: "/projects/slam_bot/cad_front_footprint.jpg", caption: "Front elevation with base footprint dimensions — 230 mm between wheel centres and 20 mm ground clearance." },
+      { src: "/projects/slam_bot/cad_top_diameter.jpg",    caption: "Top-down CAD plan showing the 430 mm circular chassis diameter and symmetric Mecanum wheel positions." },
+      { src: "/projects/slam_bot/rviz_tf_frames.jpg",      caption: "RViz visualisation of all robot TF frames: base_link, four wheel links, base_scan LiDAR frame, and aruco_camera_link." },
+      { src: "/projects/slam_bot/ros_tf_tree.jpg",         caption: "rqt TF tree showing the full transform hierarchy — base_footprint → base_link → wheel links, base_scan, and aruco_camera_link." },
+      { src: "/projects/slam_bot/rviz_lidar_scan.jpg",     caption: "Live LiDAR scan data visualised in RViz as red point cloud during a mapping session in the test hall." },
+      { src: "/projects/slam_bot/rviz_aruco_1.png",        caption: "RViz ArUco marker detection — camera feed (left) and 3D pose estimate of fiducial_102 overlaid in the world frame (right)." },
+      { src: "/projects/slam_bot/rviz_aruco_2.png",        caption: "ArUco detection from a shifted viewing angle, confirming stable 6-DoF pose estimation across different orientations." },
+      { src: "/projects/slam_bot/tf_frames_diagram.jpg",   caption: "ROS TF frame convention — parent/child/joint frame relationships used to define the robot's kinematic tree." },
     ],
     shortDescription:
       "Large-scale omnidirectional platform using Mecanum wheels with offline SLAM for autonomous indoor mapping and navigation in complex warehouse-scale environments.",
@@ -420,17 +484,48 @@ export const projects: Project[] = [
       {
         heading: "Omnidirectional Kinematics",
         body: "The kinematics model computes individual wheel velocities for all four Mecanum wheels given commanded translational and rotational velocities. The forward kinematics inverts the Jacobian to estimate robot velocity from encoder readings, which feeds directly into the odometry node for dead reckoning between SLAM updates.",
+        subSections: [
+          {
+            heading: "Inverse Kinematics",
+            body: "Inverse kinematics maps a commanded body velocity to individual wheel speed commands. Define the body velocity vector V = [vx, vy, ω]ᵀ, where vx and vy are the goal linear velocities along the x and y axes and ω is the goal angular velocity. The wheel speed command vector W = [w_FL, w_FR, w_RL, w_RR]ᵀ represents the four wheels (Front Left, Front Right, Rear Left, Rear Right), and R is the robot radius. Each wheel is mounted at a 45° roller angle at positions 45°, 315°, 135°, and 225° around the chassis. The relationship is:",
+            equations: [
+              "\\mathbf{W} = \\mathbf{A}\\,\\mathbf{V}",
+              "\\mathbf{A} = \\begin{bmatrix} \\sin(45^{\\circ}) & -\\cos(45^{\\circ}) & -R \\\\ \\sin(315^{\\circ}) & -\\cos(315^{\\circ}) & -R \\\\ \\sin(135^{\\circ}) & -\\cos(135^{\\circ}) & -R \\\\ \\sin(225^{\\circ}) & -\\cos(225^{\\circ}) & -R \\end{bmatrix}",
+              "\\mathbf{A} = \\begin{bmatrix} \\dfrac{1}{\\sqrt{2}} & -\\dfrac{1}{\\sqrt{2}} & -R \\\\[6pt] -\\dfrac{1}{\\sqrt{2}} & -\\dfrac{1}{\\sqrt{2}} & -R \\\\[6pt] \\dfrac{1}{\\sqrt{2}} & \\dfrac{1}{\\sqrt{2}} & -R \\\\[6pt] -\\dfrac{1}{\\sqrt{2}} & \\dfrac{1}{\\sqrt{2}} & -R \\end{bmatrix}",
+              "\\begin{bmatrix} w_{FL} \\\\ w_{FR} \\\\ w_{RL} \\\\ w_{RR} \\end{bmatrix} = \\begin{bmatrix} \\dfrac{1}{\\sqrt{2}} & -\\dfrac{1}{\\sqrt{2}} & -R \\\\[6pt] -\\dfrac{1}{\\sqrt{2}} & -\\dfrac{1}{\\sqrt{2}} & -R \\\\[6pt] \\dfrac{1}{\\sqrt{2}} & \\dfrac{1}{\\sqrt{2}} & -R \\\\[6pt] -\\dfrac{1}{\\sqrt{2}} & \\dfrac{1}{\\sqrt{2}} & -R \\end{bmatrix} \\begin{bmatrix} v_x \\\\ v_y \\\\ \\omega \\end{bmatrix}",
+            ],
+          },
+          {
+            heading: "Forward Kinematics",
+            body: "Forward kinematics recovers the estimated body velocity from measured wheel encoder speeds. Starting from W = AV, the body velocity is found by applying the left pseudoinverse A⁺ = (AᵀA)⁻¹Aᵀ, since A is a 4×3 over-determined matrix. Because the wheel placement is symmetric, AᵀA is diagonal:",
+            equations: [
+              "\\mathbf{A}^T\\mathbf{A} = \\operatorname{diag}\\!\\left(2,\\; 2,\\; 4R^2\\right)",
+              "\\mathbf{A}^{+} = \\left(\\mathbf{A}^T\\mathbf{A}\\right)^{-1}\\mathbf{A}^T = \\operatorname{diag}\\!\\left(\\tfrac{1}{2},\\; \\tfrac{1}{2},\\; \\tfrac{1}{4R^2}\\right)\\mathbf{A}^T",
+              "\\mathbf{V} = \\mathbf{A}^{+}\\mathbf{W}",
+              "\\begin{bmatrix} v_x \\\\ v_y \\\\ \\omega \\end{bmatrix} = \\begin{bmatrix} \\dfrac{1}{2\\sqrt{2}} & -\\dfrac{1}{2\\sqrt{2}} & \\dfrac{1}{2\\sqrt{2}} & -\\dfrac{1}{2\\sqrt{2}} \\\\[6pt] -\\dfrac{1}{2\\sqrt{2}} & -\\dfrac{1}{2\\sqrt{2}} & \\dfrac{1}{2\\sqrt{2}} & \\dfrac{1}{2\\sqrt{2}} \\\\[6pt] -\\dfrac{1}{4R} & -\\dfrac{1}{4R} & -\\dfrac{1}{4R} & -\\dfrac{1}{4R} \\end{bmatrix} \\begin{bmatrix} w_{FL} \\\\ w_{FR} \\\\ w_{RL} \\\\ w_{RR} \\end{bmatrix}",
+            ],
+          },
+        ],
+        images: [
+          { src: "/projects/slam_bot/3d_1.jpg", caption: "Isometric CAD view of the 3-tier circular chassis with four Mecanum wheels mounted at 90° intervals around the base." },
+          { src: "/projects/slam_bot/3d_2.jpg", caption: "Front elevation showing the LiDAR sensor on the mid-tier, motor controllers, and the dual Mecanum wheel assemblies." },
+          { src: "/projects/slam_bot/3d_3.jpg", caption: "Top-down plan view of the 1.2 m circular platform illustrating the symmetric Mecanum wheel placement." },
+        ],
       },
       {
         heading: "Offline SLAM Pipeline",
-        body: "A Gmapping-based SLAM pipeline with a custom scan pre-processing node handles reflective floor surfaces common in laboratory settings. Post-session, the map is refined using iterative closest point (ICP) loop-closure detection to remove accumulated drift across 200+ m trajectories.",
+        body: "The map-building system follows a five-stage offline SLAM pipeline. (1) Sensor Data Collection — the robot explores the unknown environment and continuously collects LiDAR scans and odometry readings while in motion. (2) Localization (Estimate Pose) — the robot's position and orientation are estimated in real time using scan-matching against the growing map. (3) Mapping (Build Map) — the environment map is constructed incrementally by fusing sensor observations with the estimated poses. (4) Data Association & Optimization — observations are associated with existing map features and a pose-graph optimisation step reduces accumulated drift and corrects errors across the full trajectory. (5) Map Output (Offline) — once the session is complete, a final 2D occupancy grid map is generated and saved as a .pgm + .yaml pair ready for autonomous localisation and navigation.",
+        images: [
+          { src: "/projects/slam_bot/system.png", caption: "Offline SLAM system diagram: five-stage pipeline from sensor data collection through pose-graph optimisation to the final 2D occupancy grid map output." },
+        ],
       },
     ],
     tags: ["ROS", "SLAM", "Mecanum Wheels", "Omnidirectional Drive", "LiDAR", "Navigation", "C++"],
     portfolioCategory: "Robotics & Embedded",
-    homepageFeatured: false,
+    homepageFeatured: true,
     github: "https://github.com/thura-robotics",
     period: "2024",
+    heroImage: "/projects/slam_bot/hero.jpg",
   },
   {
     slug: "drawing-robot",
@@ -514,41 +609,64 @@ export const projects: Project[] = [
   {
     slug: "kira-robot-arm",
     title: "K.I.R.A — Kinematics Integrated Robot Arm",
-    subtitle: "MATLAB & Simulink",
+    subtitle: "Arduino · CNC Shield · Bluetooth · MIT App Inventor",
     outcome:
-      "Modelled and simulated a full 6-axis robot arm in MATLAB/Simulink — forward and inverse kinematics, reachable workspace, and smooth animated pick-and-place trajectories under PD control.",
+      "Built a 3-axis 3-DOF robot arm controlled wirelessly via a custom Android app — Arduino UNO with CNC shield drives three stepper motors and a gripper stepper over Bluetooth HC-05, executing pre-programmed pick-and-place operations on command.",
     projectType: "Coursework — Kinematics & Dynamics",
     role: "Solo project",
     teamSize: "Solo",
     duration: "2023",
     contributions: [
-      "Derived forward kinematics (DH + product-of-exponentials) and a closed-form wrist-partitioned inverse solver",
-      "Generated the reachable workspace via Monte Carlo joint-space sampling",
-      "Built a Simulink PD control model with gravity compensation and 3D animated playback",
+      "Designed and assembled the 3-DOF arm with three NEMA stepper motors driven by an Arduino UNO + CNC shield stack",
+      "Wired and integrated the HC-05 Bluetooth module for wireless serial communication between the Arduino and Android app",
+      "Built a custom Android application in MIT App Inventor with pre-programmed PICK, GRAB, PLACE, and RELEASE routines transmitted as Bluetooth commands",
+      "Derived forward and inverse kinematics for the 3-axis configuration and implemented the joint-angle solver in Arduino C++ to map workspace coordinates to motor steps",
     ],
     gallery: [
-      { caption: "Simulated arm executing a pick-and-place path" },
-      { caption: "3D reachable-workspace point cloud" },
+      { src: "/projects/kira/app_demo.png",         caption: "Full system demo — robot arm on the pick-and-place mat with red and pink cubes, mobile app (left) and desktop GUI (right) showing PICK / GRAB / PLACE / RELEASE commands." },
+      { src: "/projects/kira/workspace_diagram.png", caption: "Workspace setup diagram — cube positions (pink at y=13 cm, red at y=19 cm), gripper-to-end-effector 5 cm offset annotation, and 2 cm cube reference." },
+      { src: "/projects/kira/joint_3dof_pose.png",  caption: "Three-joint configuration showing shoulder at 95°, elbow at −40°, and base at 90° — verifying the inverse kinematics solver output." },
+      { src: "/projects/kira/pick_pose.png",         caption: "Arm reaching toward the red cube with base at 90° and shoulder at 85° — pre-grasp approach pose." },
+      { src: "/projects/kira/joint_95_neg40.png",   caption: "Two-joint pose validation: shoulder 95° and elbow −40°, used to verify joint-space trajectory interpolation." },
+      { src: "/projects/kira/joint_85deg.png",       caption: "Single-joint calibration check at 85° confirming encoder feedback accuracy and zero-offset calibration." },
     ],
     shortDescription:
-      "6-DOF robot arm simulation in MATLAB and Simulink covering forward/inverse kinematics, workspace analysis, trajectory planning, and animated motion verification.",
+      "3-axis 3-DOF robot arm with Arduino UNO + CNC shield, three stepper motors, HC-05 Bluetooth, and a custom MIT App Inventor Android app for wireless pick-and-place control.",
     fullDescription:
-      "K.I.R.A (Kinematics Integrated Robot Arm) is a comprehensive MATLAB/Simulink project exploring the full kinematic modelling of a 6-DOF serial manipulator. The project implements Denavit-Hartenberg (DH) parameter convention for systematic forward kinematics computation, and a closed-form analytical inverse kinematics solver for the wrist-partitioned configuration. Workspace reachability is visualised as a 3D point cloud generated by Monte Carlo joint-space sampling. Trajectory planning uses cubic polynomial interpolation for smooth joint-space motion between waypoints. The Simulink model adds PD joint controllers, allowing animated closed-loop simulation of pick-and-place and welding-path trajectories.",
+      "K.I.R.A (Kinematics Integrated Robot Arm) is a 3-axis, 3-DOF serial robot arm built as a kinematics coursework project. The mechanical structure is driven by three NEMA stepper motors controlled by an Arduino UNO paired with a CNC shield — a compact stacked solution that provides three independent stepper driver channels. A fourth small stepper motor at the end effector actuates the gripper for pick-and-place tasks. Wireless control is achieved through an HC-05 Bluetooth module connected to the Arduino UART, paired with a custom Android application built in MIT App Inventor. The app presents PICK, GRAB, PLACE, and RELEASE buttons that transmit single-character Bluetooth commands triggering pre-programmed joint-angle sequences on the Arduino. The inverse kinematics solver maps target workspace coordinates to the required joint angles, which are then converted to motor step counts for each axis.",
     technicalDetails: [
       {
-        heading: "Forward & Inverse Kinematics",
-        body: "Forward kinematics uses the product-of-exponentials (PoE) formulation cross-validated against the DH convention. The inverse kinematics solver decouples the wrist position from orientation, using geometric methods for the first three joints and Euler angle decomposition for the wrist. Singularity proximity is tracked via the Jacobian condition number.",
+        heading: "Hardware Stack",
+        body: "The controller stack consists of an Arduino UNO as the main processor with a CNC shield mounted on top, providing three A4988 stepper driver slots for the base rotation, shoulder, and elbow joints. Each NEMA stepper is wired to its corresponding driver channel. A fourth smaller stepper motor is mounted at the end effector to open and close the gripper. Power is supplied to the CNC shield via a dedicated 12 V rail, keeping the stepper current paths separate from the Arduino 5 V logic supply.",
+        images: [
+          { src: "/projects/kira/circuit.png", caption: "Circuit diagram — Arduino UNO + CNC shield wired to three NEMA steppers (Y-Base, X-Lower Shank, Z-Upper Shank), HC-05 Bluetooth module, and the gripper stepper with dedicated driver." },
+        ],
       },
       {
-        heading: "Simulink Control Model",
-        body: "A PD controller with gravity compensation is implemented for each joint using Simulink blocks. Gravitational torques are computed symbolically from the DH parameters and exported as lookup tables. The model supports real-time visualisation via the MATLAB Robotics Toolbox 3D renderer.",
+        heading: "Bluetooth Control & Android App",
+        body: "An HC-05 Bluetooth module is connected to the Arduino hardware serial (TX/RX) pins and paired with an Android device. The custom MIT App Inventor application presents a clean control panel with PICK (red / pink cube selection), GRAB, PLACE (red / pink target), and RELEASE buttons. Each button transmits a single-character command over Bluetooth serial. The Arduino firmware parses the incoming byte and executes the corresponding pre-programmed joint-angle sequence by stepping each motor to its target position in a coordinated move.",
+        images: [
+          { src: "/projects/kira/app_demo.png", caption: "Live demo — robot arm on the pick-and-place mat, custom MIT App Inventor Android app (left) and desktop control panel (right) showing PICK / GRAB / PLACE / RELEASE commands over Bluetooth." },
+        ],
+      },
+      {
+        heading: "Robot Parameters (Denavit–Hartenberg)",
+        body: "The DH convention is used to systematically assign coordinate frames to each link of the 3-DOF arm and derive the transformation matrices between consecutive joints. Link 1 (base to shoulder) has a length of 13 cm, while Links 2 and 3 (upper and lower shank) are each 12 cm. The resulting DH parameter table is: Joint 1 — θ=θ₁, d=13 cm, α=−90°, a=0; Joint 2 — θ=θ₂−90°, d=0, α=0°, a=12 cm; Joint 3 — θ=θ₃+90°, d=0, α=0°, a=12 cm. The joint angle offsets (−90° on Joint 2, +90° on Joint 3) account for the physical home configuration of the arm.",
+        images: [
+          { src: "/projects/kira/DH.jpg", caption: "DH parameter derivation for the 3-DOF arm — frame assignment diagram (left) and the complete θ / d / α / a parameter table for all three joints (right)." },
+        ],
+      },
+      {
+        heading: "Kinematics & Joint Control",
+        body: "Forward kinematics for the 3-DOF configuration maps joint angles (base θ₁, shoulder θ₂, elbow θ₃) to the end-effector position using the Denavit-Hartenberg convention. The inverse kinematics solver uses geometric decomposition — the elbow position is found from the target x-y-z coordinates, and each joint angle is derived analytically. Joint angles are converted to motor step counts using the stepper resolution and gear ratio, and the Arduino drives each axis with step/direction signals to the CNC shield drivers.",
       },
     ],
-    tags: ["MATLAB", "Simulink", "Kinematics", "DH Parameters", "Trajectory Planning", "Robot Arm", "Workspace Analysis"],
+    tags: ["Arduino", "CNC Shield", "Stepper Motor", "Bluetooth HC-05", "MIT App Inventor", "Kinematics", "Embedded C++", "Robot Arm"],
     portfolioCategory: "Robotics & Embedded",
     homepageFeatured: false,
     github: "https://github.com/thura-robotics",
     period: "2023",
+    heroImage: "/projects/kira/hero.png",
   },
   {
     slug: "attention-robot",
@@ -592,41 +710,65 @@ export const projects: Project[] = [
   {
     slug: "line-following-robot",
     title: "High-Speed Line Following Robot",
-    subtitle: "YTU Rolympic Competition — 2nd Prize",
+    subtitle: "KMITL Line Following Competition — 2nd Prize",
     outcome:
-      "Designed a competition line-following robot from scratch — custom PCB, STM32 firmware, and a tightly tuned PID loop — that placed 2nd at the YTU Rolympic competition.",
+      "Designed a competition line-following robot from scratch — custom PCB, STM32 firmware, and a tightly tuned PID loop — that placed 2nd at the KMITL Line Following Competition.",
     projectType: "Competition — 2nd Prize",
     role: "Full design (PCB, firmware, control)",
     teamSize: "Team of 2",
     duration: "2022 – 2023",
     contributions: [
-      "Designed a compact 2-layer KiCAD PCB integrating STM32F103, dual H-bridge drivers, IR array, and 3S power",
-      "Wrote a 1 kHz PID control loop steering from the weighted IR sensor centroid",
-      "Tuned gains (Ziegler-Nichols + track-profile iteration) for oscillation-free high-speed cornering",
+      "Designed the 2-layer KiCAD PCB that doubles as the robot chassis — routing STM32F411RE, DRV8833 motor driver, 8-channel IR sensor array, LEDs, and power management within the 230×230 mm size limit",
+      "Implemented sensor normalisation in C — calibration, range mapping, and weighted-centroid position estimation from 8 phototransistor readings",
+      "Tuned the PID feedback loop (Kp, Ki, Kd) iteratively on the competition track profile for oscillation-free high-speed cornering",
     ],
     gallery: [
-      { caption: "Finished robot on the competition track" },
-      { caption: "Custom STM32 PCB layout (KiCAD)" },
+      { src: "/projects/hi_speed_lfr/hero.jpg",    caption: "Finished and wired robot — LiPo battery mounted, STM32F411RE Nucleo seated, and both drive wheels fitted." },
+      { src: "/projects/hi_speed_lfr/assem_1.jpg", caption: "Mid-assembly on the workbench — STM32 Nucleo mounted, signal wiring in progress, multimeter ready for continuity checks." },
+      { src: "/projects/hi_speed_lfr/pcb_3d.png",  caption: "3D isometric render of the complete robot showing the PCB-as-chassis form factor, IR sensor arm, and both rubber drive wheels." },
     ],
     shortDescription:
-      "Competition-grade line follower with a custom STM32 PCB chassis, 8-channel IR sensor array, and a finely tuned PID control loop achieving sub-100 ms lap times.",
+      "Competition-grade line follower with a custom STM32F411RE PCB chassis, 8-channel TOPS-030TB2 IR sensor array, DRV8833 motor driver, and a finely tuned PID control loop.",
     fullDescription:
-      "Built for the YTU Rolympic line following competition, this robot was designed around the goal of maximum speed with reliable tracking. A custom 2-layer PCB integrates the STM32F103 microcontroller, dual TB6612FNG H-bridge motor drivers, an 8-channel IR sensor array, and a 3S LiPo power management system into a compact 180 mm chassis. The PID control loop runs at 1 kHz, computing steering corrections from the weighted centroid of the activated IR sensors. Extensive PID gain tuning on the competition track profile resulted in smooth high-speed cornering without oscillation. The robot placed 2nd at the YTU Rolympic competition.",
+      "Built for the KMITL Line Following Competition as a Microprocessor and Interface course final project, this robot was designed around maximum speed and reliable tracking. A custom 2-layer PCB doubles as the robot chassis, integrating the STM32F411RE microcontroller, a DRV8833 dual H-bridge motor driver, 8 TOPS-030TB2 phototransistor IR sensors spaced 10 mm apart at equal radius from the motor midpoint, and 8 TOIR-30A94CXAA LEDs positioned directly in front of the sensors. The entire assembly fits within the 230×230 mm competition size limit. The PID control loop continuously computes a steering correction from the weighted centroid of active IR sensors and drives the two DC motors accordingly. The robot placed 2nd at the KMITL Line Following Competition.",
     technicalDetails: [
       {
-        heading: "Custom PCB Design",
-        body: "The 2-layer PCB was designed in KiCAD with careful attention to trace impedance on the motor driver power paths and noise isolation between the analog IR sensor signals and the digital MCU domain. A ground plane pour on both layers minimises EMI from the high-current motor driver switches.",
+        heading: "PCB Design & Firmware",
+        body: "The 2-layer PCB was designed in KiCAD to serve simultaneously as the robot's structural chassis — eliminating a separate frame and minimising weight for better mobility. The STM32F411RE microcontroller acts as the central processing unit. Eight TOPS-030TB2 phototransistor sensors are spaced 10 mm apart, all at equal radius from the midpoint between the two DC motors, ensuring symmetric line detection. Eight TOIR-30A94CXAA LEDs are placed directly in front of their paired sensors so that infrared light bounces cleanly back from the track surface. Motor drive is handled by a single DRV8833 dual H-bridge IC. Two push buttons, three 0402 RGB status LEDs, and a protection diode complete the circuit. After soldering, every net was verified with a multimeter before first power-on.",
+        images: [
+          { src: "/projects/hi_speed_lfr/pcb_2d.png",  caption: "KiCAD 2D PCB layout — front copper layer showing sensor array routing and motor driver placement." },
+          { src: "/projects/hi_speed_lfr/pcb_3d_1.png", caption: "3D front view of the assembled PCB — sensor array at the top, STM32F411RE Nucleo and DRV8833 at the base." },
+        ],
+        imageColumns: 1,
+        subSections: [
+          {
+            heading: "Firmware Integration",
+            body: "All peripheral pins were configured using STM32CubeMX, which auto-generates the HAL initialisation code for the STM32F411RETx LQFP64. Timer channels TIM2 and TIM3 are mapped to the DRV8833 PWM inputs for left and right motor speed control. Three ADC channels read the IR sensor voltages, and UART2 is used for serial debug output. GPIO outputs drive the RGB status LEDs and read the two push-button inputs. The generated .ioc project ensures pin assignments are conflict-free and the clock tree is configured for maximum 100 MHz system clock.",
+            images: [
+              { src: "/projects/hi_speed_lfr/cubemx.png", caption: "STM32CubeMX pinout configuration for the STM32F411RETx LQFP64 — timer PWM, ADC, UART, and GPIO assignments for the line follower firmware." },
+            ],
+          },
+        ],
       },
       {
-        heading: "PID Tuning",
-        body: "PID gains were tuned using a Ziegler-Nichols step-response method on the straight-line segment, then iteratively adjusted for the tight-corner profile of the competition track. Derivative gain filtering prevents noise amplification from IR sensor state transitions at high speeds.",
+        heading: "Sensor Normalisation",
+        body: "Raw phototransistor readings vary with ambient lighting and individual component tolerances, so a three-step normalisation pipeline is applied at startup. First, calibration establishes each sensor's minimum and maximum response by sweeping the robot over black and white surfaces, eliminating per-sensor bias. Second, range mapping scales each reading linearly into a common 0–100 range. Third, the normalised array is used to compute a weighted centroid — the signed error value fed into the PID controller — ensuring consistent position estimates regardless of environmental light changes.",
+      },
+      {
+        heading: "PID Control",
+        body: "A closed-loop PID feedback controller running on the STM32F411RE continuously adjusts motor speeds to keep the robot centred on the 19 mm line. The proportional term responds to the current lateral offset, the integral term corrects accumulated steady-state drift, and the derivative term damps oscillation by reacting to the rate of error change. Kp, Ki, and Kd were tuned iteratively by running the robot on both Track A (1:30 min limit) and Track B (2:30 min limit) and observing overshoot and cornering stability, converging on gains that deliver smooth high-speed tracking.",
+        equations: [
+          "u(t) = K_p\\, e(t) \\;+\\; K_i \\int_0^{t} e(\\tau)\\, d\\tau \\;+\\; K_d\\, \\frac{d\\, e(t)}{dt}",
+        ],
       },
     ],
-    tags: ["STM32", "KiCAD", "PID Control", "IR Sensors", "PCB Design", "Embedded C", "Motor Control", "Competition"],
+    tags: ["STM32F411RE", "KiCAD", "PID Control", "IR Sensors", "DRV8833", "PCB Design", "Embedded C", "Motor Control", "Competition"],
     portfolioCategory: "Robotics & Embedded",
     homepageFeatured: false,
     github: "https://github.com/thura-robotics",
     period: "2022 – 2023",
+    heroImage: "/projects/hi_speed_lfr/hero_composite.jpg",
+    contextImage: "/projects/hi_speed_lfr/track.jpg",
   },
 ];
 
@@ -682,6 +824,7 @@ export const hardwareProjects = [
     tools: ["KiCad", "STM32F4", "H-Bridge", "PCB Layout", "Schematic Design"],
     viewerUrl: "https://thura-robotics.github.io/designs/nucleo_LFR.html",
     year: "2023",
+    image: "/projects/hi_speed_lfr/pcb_2d.png",
   },
   {
     title: "SMPS Current Balancer",
@@ -690,6 +833,7 @@ export const hardwareProjects = [
     tools: ["KiCad", "LTSpice", "LTC4359", "MOSFET", "Power Electronics", "SMPS"],
     viewerUrl: "https://thura-robotics.github.io/designs/ltc4359_droop.html",
     year: "2024",
+    image: "/projects/pcbs/pwd_pcb.png",
   },
 ];
 
@@ -702,7 +846,7 @@ export const achievements = [
   },
   {
     title: "2nd Prize — Line Following Robot",
-    event: "YTU Rolympic Competition",
+    event: "KMITL Line Following Competition",
     year: "2023",
     description: "Designed a high-speed PID-controlled line following robot with custom PCB and STM32.",
   },
