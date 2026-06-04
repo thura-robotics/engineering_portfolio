@@ -2,7 +2,7 @@ import { projects } from "@/lib/data";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, FileText } from "lucide-react";
 import { GithubIcon, YoutubeIcon } from "@/components/SocialIcons";
 import MediaFrame from "@/components/MediaFrame";
 import { notFound } from "next/navigation";
@@ -78,7 +78,20 @@ export default async function ProjectDetailPage({ params }: Props) {
             {project.portfolioCategory}
           </p>
           <h1 style={{ fontSize: "clamp(1.6rem, 4vw, 2.4rem)", fontWeight: 800, color: "var(--text)", lineHeight: 1.15, marginBottom: "0.4rem" }}>
-            {project.title}
+            {project.pdf ? (
+              <a
+                href={project.pdf}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="title-pdf-link"
+                title="View the full project report (PDF)"
+              >
+                {project.title}
+                <FileText size={20} className="title-pdf-icon" aria-hidden="true" />
+              </a>
+            ) : (
+              project.title
+            )}
           </h1>
           <p style={{ fontSize: "1rem", color: "var(--text-muted)", marginBottom: "1.5rem" }}>{project.subtitle}</p>
 
@@ -102,7 +115,23 @@ export default async function ProjectDetailPage({ params }: Props) {
           {/* ── 3. Hero visual ── */}
           <figure style={{ margin: "0 0 1rem" }}>
             {project.heroImage ? (
-              <MediaFrame src={project.heroImage} alt={project.title} aspectRatio="16 / 9" />
+              project.pdf ? (
+                <a
+                  href={project.pdf}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hero-pdf-link"
+                  title="View the full project report (PDF)"
+                >
+                  <MediaFrame src={project.heroImage} alt={project.title} aspectRatio="16 / 9" />
+                  <span className="hero-pdf-badge">
+                    <FileText size={16} aria-hidden="true" />
+                    View Full Report (PDF)
+                  </span>
+                </a>
+              ) : (
+                <MediaFrame src={project.heroImage} alt={project.title} aspectRatio="16 / 9" />
+              )
             ) : (
               <div
                 style={{
@@ -235,13 +264,42 @@ export default async function ProjectDetailPage({ params }: Props) {
                             <MediaFrame
                               src={img.src}
                               alt={img.caption}
-                              aspectRatio="4 / 3"
+                              aspectRatio={img.aspect ?? "4 / 3"}
                               radius="0.4rem"
                               objectFit={detail.imageFit ?? "contain"}
                             />
                             {img.caption && (
                               <figcaption style={{ fontSize: "0.73rem", color: "var(--text-muted)", marginTop: "0.4rem", lineHeight: 1.45 }}>
                                 {img.caption}
+                              </figcaption>
+                            )}
+                          </figure>
+                        ))}
+                      </div>
+                    )}
+                    {/* Videos (looping silent autoplay, GIF-like) */}
+                    {detail.videos && detail.videos.length > 0 && (
+                      <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginTop: "1.25rem" }}>
+                        {detail.videos.map((vid, v) => (
+                          <figure key={v} style={{ margin: 0 }}>
+                            <video
+                              src={vid.src}
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              style={{
+                                width: "100%",
+                                maxWidth: "360px",
+                                display: "block",
+                                margin: "0 auto",
+                                borderRadius: "0.5rem",
+                                border: "1px solid var(--border)",
+                              }}
+                            />
+                            {vid.caption && (
+                              <figcaption style={{ fontSize: "0.73rem", color: "var(--text-muted)", marginTop: "0.4rem", lineHeight: 1.45, textAlign: "center" }}>
+                                {vid.caption}
                               </figcaption>
                             )}
                           </figure>
@@ -293,6 +351,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           )}
 
           {/* ── 9. Gallery (captioned) ── */}
+          {galleryItems.length > 0 && (
           <section style={{ marginBottom: "2.5rem" }}>
             <h2 style={sectionHeading}>Gallery</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1rem" }} className="gallery-grid">
@@ -331,6 +390,7 @@ export default async function ProjectDetailPage({ params }: Props) {
               ))}
             </div>
           </section>
+          )}
 
           {/* ── 10. Links (GitHub + YouTube) ── */}
           <div style={{ borderTop: "1px solid var(--border)", paddingTop: "2rem", display: "flex", justifyContent: "center", gap: "1.25rem" }}>
@@ -401,6 +461,92 @@ export default async function ProjectDetailPage({ params }: Props) {
           border-color: var(--primary) !important;
           transform: translateY(-4px);
           box-shadow: 0 8px 22px rgba(34,211,238,0.25);
+        }
+
+        /* ── Clickable title → PDF ── */
+        .title-pdf-link {
+          color: inherit;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          transition: color 0.2s;
+        }
+        .title-pdf-icon {
+          color: var(--primary);
+          opacity: 0.7;
+          flex-shrink: 0;
+          transition: opacity 0.2s, transform 0.2s;
+        }
+        .title-pdf-link:hover {
+          color: var(--primary);
+          text-decoration: underline;
+          text-underline-offset: 4px;
+          text-decoration-thickness: 2px;
+        }
+        .title-pdf-link:hover .title-pdf-icon {
+          opacity: 1;
+          transform: translateY(-2px);
+        }
+
+        /* ── Clickable hero image → PDF ── */
+        .hero-pdf-link {
+          position: relative;
+          display: block;
+          cursor: zoom-in;
+          border-radius: 0.75rem;
+          overflow: hidden;
+          isolation: isolate;
+        }
+        /* zoom the MediaFrame (its root div) on hover */
+        .hero-pdf-link > div {
+          transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .hero-pdf-link:hover > div {
+          transform: scale(1.045);
+        }
+        /* darkening sweep so the badge stays readable */
+        .hero-pdf-link::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to top, rgba(2,6,12,0.62) 0%, rgba(2,6,12,0) 45%);
+          opacity: 0;
+          transition: opacity 0.35s ease;
+          pointer-events: none;
+          z-index: 2;
+        }
+        .hero-pdf-link:hover::after { opacity: 1; }
+        /* the call-to-action badge */
+        .hero-pdf-badge {
+          position: absolute;
+          left: 50%;
+          bottom: 1rem;
+          transform: translate(-50%, 14px);
+          display: inline-flex;
+          align-items: center;
+          gap: 0.45rem;
+          padding: 0.55rem 1.1rem;
+          border-radius: 999px;
+          background: var(--primary);
+          color: var(--bg);
+          font-size: 0.82rem;
+          font-weight: 700;
+          letter-spacing: 0.01em;
+          white-space: nowrap;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+          opacity: 0;
+          transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+          pointer-events: none;
+          z-index: 3;
+        }
+        .hero-pdf-link:hover .hero-pdf-badge {
+          opacity: 1;
+          transform: translate(-50%, 0);
+        }
+        @media (hover: none) {
+          /* touch devices: keep the badge visible since there is no hover */
+          .hero-pdf-badge { opacity: 0.95; transform: translate(-50%, 0); }
         }
       `}</style>
     </>

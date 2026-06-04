@@ -202,9 +202,10 @@ export type Project = {
     heading: string;
     body: string;
     equations?: string[];   // KaTeX display-mode TeX strings
-    images?: { src: string; caption: string }[];
+    images?: { src: string; caption: string; aspect?: string }[]; // aspect e.g. "16 / 9"
     imageColumns?: number;  // fixed column count (default: auto-fit)
     imageFit?: "contain" | "cover"; // default: contain
+    videos?: { src: string; caption: string }[]; // looping silent autoplay clips (GIF-like)
     subSections?: {
       heading: string;
       body: string;
@@ -219,6 +220,7 @@ export type Project = {
   homepageFeatured: boolean;
   github?: string;               // per-project repo link (optional until provided)
   youtube?: string;              // per-project demo video link (optional until provided)
+  pdf?: string;                  // project report/poster PDF — makes hero image + title clickable
   period: string;
   // ── MIT inverted-pyramid fields (optional; sections render only when present) ──
   outcome?: string;              // punchy lead: what was built + result + my part
@@ -251,9 +253,14 @@ export const projects: Project[] = [
       "Validated detection reliability to 8 m range through staged rubble field trials",
     ],
     gallery: [
-      { caption: "Platform in UAV (aerial) configuration during flight test" },
-      { caption: "Ground (UGV) mode traversing simulated rubble" },
-      { caption: "Live object-detection overlay identifying a survivor target" },
+      { src: "/projects/hybrid/field_test.jpg", caption: "Field test — operating the platform in UAV configuration on an outdoor court." },
+      { src: "/projects/hybrid/team_presenting.jpg", caption: "Presenting the project with a teammate at the capstone showcase." },
+      { src: "/projects/hybrid/S__7561233.jpg", caption: "Bench integration — the platform in UGV mode during wiring and controller bring-up." },
+      { src: "/projects/hybrid/S__7561234.jpg", caption: "Weighing the assembled platform (3.4 kg) to validate the eCalc flight-performance and thrust budget." },
+      { src: "/projects/hybrid/pcb.jpg", caption: "Custom servo signal-distribution board with per-limb headers (H1–H4)." },
+      { src: "/projects/hybrid/cad_v1_uav.png", caption: "Early v1 CAD concept — UAV (quadcopter) configuration." },
+      { src: "/projects/hybrid/cad_v1_ugv.png", caption: "Early v1 CAD concept — UGV (drive) configuration." },
+      { src: "/projects/hybrid/cad_v1_limb.png", caption: "Early v1 CAD — close-up of a single 3-DOF limb with its three stacked servos." },
     ],
     shortDescription:
       "Multi-modal robotic platform capable of switching between aerial and ground modes for post-earthquake search and rescue, powered by ROS2 and a custom-trained AI vision model.",
@@ -262,15 +269,33 @@ export const projects: Project[] = [
     technicalDetails: [
       {
         heading: "System Architecture",
-        body: "The platform runs a ROS2 Humble stack on an onboard NVIDIA Jetson-class SBC. A behaviour-tree-based mission manager governs high-level decisions including mode switching, waypoint following, and emergency return-to-home. Each mode (UAV / UGV) exposes a standardised control interface to higher-level planners.",
+        body: "The platform is organised into five subsystems. (1) Communication — a ground station computer links to the robot over WiFi via a telemetry module, while an RC transmitter/receiver pair provides a direct manual override (PWM to the flight controller). (2) Power Unit — a 5200 mAh 6S 75C LiPo supplies 24 V, with a 22-to-12 V step-down converter deriving the 12 V and 5 V rails that feed the rest of the system. (3) Controller — an NVIDIA Jetson Orin Nano runs ROS 2 and the onboard AI models (YOLO for detection, VIO for visual-inertial odometry), coordinating with a dedicated flight controller for stabilised flight. (4) Low-Level Control — a servo controller on a serial bus drives 8 position-control units (the transformation joints) and 4 driving units, while an ESC bank powers the 4 BLDC propulsion motors. (5) Inspection — an OAK-D Lite depth-AI camera streams to the Jetson over serial for survivor and hazard detection. Power (red), control signals (orange), and data signals (black) are routed separately throughout.",
+        images: [
+          { src: "/projects/hybrid/system.jpg", caption: "Full system architecture — Communication, Power Unit, Controller (Jetson Orin Nano + flight controller), Low-Level Control (servo/driving units, ESC, BLDC motors), and Inspection (OAK-D Lite), with power, control, and data signal paths colour-coded." },
+        ],
       },
       {
         heading: "Vision Pipeline",
         body: "A custom object detection model was trained and annotated using Roboflow with a dataset of 2,400+ images captured in earthquake-simulated rubble. The model runs on-device using TensorRT optimisation, achieving 28 FPS on the embedded compute module. Detections are projected to a 3D occupancy map via depth-camera point clouds.",
+        images: [
+          { src: "/projects/hybrid/vision_combined.jpg", aspect: "43 / 10", caption: "Inspection vision pipeline — (left) the OAK-D Lite feeds parallel asyncio loops (RGB, stereo depth with ROI distance overlay, and YOLO11n detection); (centre) the WebRTC connection sequence from RTCPeerConnection/SDP offer through ICE gathering to the live track; (right) the browser streaming UI with mode toggle, live view, and snapshot capture." },
+        ],
       },
       {
         heading: "Mechanical Transformation",
-        body: "The transformation mechanism relies on a servo-actuated multi-joint linkage that reconfigures the landing gear struts into a wheeled ground platform within 4 seconds. Weight distribution analysis was performed in SOLIDWORKS to ensure stable flight and ground CoG positions.",
+        body: "The robot has four articulated limbs, each driven by three servos — a 3-DOF articulated joint per limb. This shared limb architecture lets the same hardware both drive across the ground like a wheeled mobile robot and morph to fold the limbs upward and hover like a quadcopter. SOLIDWORKS and the eCalc flight-calculation software were used together to verify the robot's centre of gravity and centre of mass in each configuration, and to validate the propulsion and flight performance before fabrication.",
+        images: [
+          { src: "/projects/hybrid/transformation.jpg", aspect: "37 / 9", caption: "Transformation sequence — the four 3-DOF limbs reconfigure from UGV (drive) mode, through the morphing state, into UAV (hover) quadcopter mode." },
+        ],
+        subSections: [
+          {
+            heading: "Appendage Repurposing",
+            body: "The key to fitting both locomotion modes into one platform is a dual-use appendage at the end of each limb. A single BLDC motor sits on a shared axis driving two co-located mechanisms: a large geared wheel for ground driving and a propeller for flight. In UGV mode the motor turns the wheel through its gear; once the limbs morph upward into UAV mode, the same motor spins the propeller for thrust. Reusing one actuator for both functions keeps the robot light and avoids carrying separate drive and flight powertrains.",
+            images: [
+              { src: "/projects/hybrid/appendage.png", caption: "Exploded view of one repurposed appendage — the 3-DOF limb joint, geared drive wheel, shared BLDC motor, and propeller all mounted on a single axis." },
+            ],
+          },
+        ],
       },
     ],
     tags: ["ROS2", "Computer Vision", "Roboflow", "UAV", "UGV", "NVIDIA Jetson", "Search & Rescue", "Sensor Fusion"],
@@ -278,6 +303,7 @@ export const projects: Project[] = [
     homepageFeatured: false,
     github: "https://github.com/thura-robotics",
     period: "2025 – 2026",
+    heroImage: "/projects/hybrid/hero_hd.jpg",
   },
   {
     slug: "bipedal-humanoid-leg",
@@ -409,46 +435,33 @@ export const projects: Project[] = [
   {
     slug: "unitree-a1-ddpg",
     title: "Unitree A1 Robot Dog — Sim-to-Real",
-    subtitle: "DDPG Reinforcement Learning",
+    subtitle: "NVIDIA Isaac Sim · DDPG & PPO",
     outcome:
-      "Taught a four-legged robot to walk using reinforcement learning — entirely in simulation — then transferred the learned policy onto the real Unitree A1, where it produced a stable trotting gait.",
+      "Trained a Unitree A1 quadruped to stand up and walk over varied terrain using custom deep reinforcement learning in NVIDIA Isaac Sim.",
     projectType: "Coursework — Reinforcement Learning",
     role: "Solo project",
     teamSize: "Solo",
     duration: "2024",
-    contributions: [
-      "Implemented a DDPG actor-critic agent in PyTorch outputting 12-DOF joint torques",
-      "Shaped a multi-term reward (velocity tracking, torque, stability, foot-slip) with curriculum learning over terrain roughness",
-      "Applied domain randomisation to bridge the reality gap and deployed the policy on the A1's onboard compute",
-    ],
-    gallery: [
-      { caption: "Training rollouts in NVIDIA Isaac Sim" },
-      { caption: "Reward curve across 2M training steps" },
-      { caption: "Policy running on the physical Unitree A1" },
-    ],
     shortDescription:
-      "Locomotion policy for a Unitree A1 quadruped trained with Deep Deterministic Policy Gradient (DDPG) in NVIDIA Isaac Sim and transferred to real hardware.",
+      "A deep reinforcement learning project that trains a Unitree A1 robot dog in NVIDIA Isaac Sim to stand up from crouching and walk across different terrain, using DDPG and PPO policies.",
     fullDescription:
-      "This project explores the application of model-free deep reinforcement learning to quadruped locomotion, using the Unitree A1 robot as the target platform. A Deep Deterministic Policy Gradient (DDPG) agent was trained entirely in NVIDIA Isaac Sim using a physics-accurate URDF articulation. The observation space includes joint positions, velocities, base orientation quaternion, and commanded velocity targets. The reward function was shaped to encourage stable forward gait while penalising excessive torque, foot-slip, and unstable base oscillations. After 2 million training steps, the policy was exported and validated on the physical Unitree A1, demonstrating stable trotting gait and velocity-tracking behaviour.",
+      "This project uses custom-trained deep reinforcement learning to teach the Unitree A1 robot dog two tasks: standing up from a crouching position, and walking up and down different terrain. The policies were trained in NVIDIA Isaac Sim with NVIDIA Omniverse. A full explanation can be found in the YouTube video linked below.",
+    gallery: [],
     technicalDetails: [
       {
-        heading: "DDPG Training Setup",
-        body: "Training used a custom DDPG implementation in PyTorch with an actor-critic architecture. The actor network outputs 12-dimensional joint torque commands. Experience replay with a buffer of 500,000 transitions and Ornstein-Uhlenbeck exploration noise were used to stabilise training. Parallel environment rollouts in Isaac Sim accelerated sample collection by 32×.",
-      },
-      {
-        heading: "Reward Shaping",
-        body: "The reward function balances forward velocity tracking (positive), torque minimisation (negative penalty), base roll/pitch deviation (negative penalty), and foot-slip (negative penalty). Curriculum learning was applied by gradually increasing terrain roughness over training to improve generalisation.",
-      },
-      {
-        heading: "Sim-to-Real Transfer",
-        body: "Domain randomisation of actuator gains, joint friction, payload mass, and ground friction was applied during training to bridge the reality gap. The exported policy was deployed on the A1's onboard Raspberry Pi CM4 compute module and validated across multiple floor surfaces.",
+        heading: "Deep Reinforcement Learning",
+        body: "The robot was trained with custom deep reinforcement learning to perform two tasks: (1) standing up from a crouching position, and (2) walking up and down across different terrain. Two policies were used and compared — Deep Deterministic Policy Gradient (DDPG) and Proximal Policy Optimisation (PPO). Training was carried out entirely in NVIDIA Isaac Sim, where the simulated A1 learns the behaviours before any real-world deployment.",
+        images: [
+          { src: "/projects/unitree/isaac_sim.png", caption: "Training the Unitree A1 in NVIDIA Isaac Sim — the quadruped learning to traverse stepped terrain inside the physics simulator." },
+        ],
       },
     ],
-    tags: ["NVIDIA Isaac Sim", "DDPG", "PyTorch", "Reinforcement Learning", "Unitree A1", "Sim-to-Real", "Quadruped"],
+    tags: ["NVIDIA Isaac Sim", "NVIDIA Omniverse", "DDPG", "PPO", "Reinforcement Learning", "Unitree A1", "Quadruped"],
     portfolioCategory: "AI & Computer Vision",
     homepageFeatured: false,
     github: "https://github.com/thura-robotics",
     period: "2024",
+    heroImage: "/projects/unitree/hero.png",
   },
   {
     slug: "omnidirectional-robot",
@@ -543,9 +556,11 @@ export const projects: Project[] = [
       "Generated GRBL-compatible G-code toolpaths driving the XY Cartesian motion system",
     ],
     gallery: [
-      { caption: "Robot mid-drawing on the competition floor" },
-      { caption: "Source photo vs robot-rendered output" },
-      { caption: "Award presentation at K-Engineering World Tour 2024" },
+      { src: "/projects/cartesian/testing_trimmed.jpg", caption: "Live testing — the robot drawing a portrait on paper while driven from the laptop over serial." },
+      { src: "/projects/cartesian/assembling.jpg", caption: "Assembling the pen-lift carriage during the build." },
+      { src: "/projects/cartesian/iso.jpg", caption: "Isometric CAD render of the CoreXY gantry with the central carriage plate highlighted." },
+      { src: "/projects/cartesian/pen.jpg", caption: "Close-up CAD render of the servo-actuated pen-holder mechanism." },
+      { src: "/projects/cartesian/another_render.jpg", caption: "Full CAD render of the assembled drawing robot from an alternate angle." },
     ],
     shortDescription:
       "Award-winning Cartesian robot that converts portrait photographs into G-code using OpenCV and a DFS path-planning algorithm, then renders photorealistic pencil drawings autonomously.",
@@ -555,10 +570,25 @@ export const projects: Project[] = [
       {
         heading: "Image to G-code Pipeline",
         body: "The OpenCV pipeline applies adaptive thresholding, Canny edge detection, and contour extraction to convert portrait images into stroke sets. Stroke density is modulated by local image intensity, reproducing photorealistic tonal gradients. The final stroke set is sorted using a custom DFS algorithm that reduces total pen-up travel by over 60% compared to naive ordering.",
+        images: [
+          { src: "/projects/cartesian/image2gcode.jpg", caption: "Full image-to-G-code pipeline: webcam face detection (Haar cascade) → preprocessing (grayscale, CLAHE, Gaussian blur) → edge detection (Sobel/Canny) → post-processing (thresholding, binary edges) → DFS-based G-code generation, previewed in the NC viewer." },
+        ],
       },
       {
         heading: "Cartesian Robot Mechanics",
         body: "The two-axis (XY) Cartesian robot uses NEMA 17 stepper motors with lead-screw linear rails for high-precision positioning. An Arduino Mega with a CNC shield runs GRBL firmware, accepting G-code over serial. A servo-actuated pen lift mechanism controls Z-axis pen contact with 0.2 mm vertical resolution.",
+        images: [
+          { src: "/projects/cartesian/kine.jpg", caption: "CoreXY kinematic model — motor angles θ₁ and θ₂ drive pulleys of radius r; their combined rotation maps directly to the carriage's X–Y position." },
+          { src: "/projects/cartesian/corexy.jpg", caption: "CoreXY motion principle — the two motors share one timing belt: rotating them together moves the gantry along one axis, while opposing rotation moves it along the other." },
+          { src: "/projects/cartesian/wireframe.jpg", caption: "Top-down technical drawing of the gantry assembly — linear rails, lead screw, stepper motors, and the central pen carriage." },
+        ],
+      },
+      {
+        heading: "Electronics & Wiring",
+        body: "The drive electronics are built around an Arduino with a CNC shield. Two NEMA 17 stepper motors are connected to the X and Y driver slots, and a servo handles the pen-lift Z-axis. Lever limit switches provide axis homing, and the whole system is powered through a single DC barrel jack feeding the shield's motor supply rail.",
+        images: [
+          { src: "/projects/cartesian/wire_diagram.jpg", caption: "Wiring diagram — two NEMA 17 steppers and a pen-lift servo wired to the Arduino CNC shield, with limit switches for homing and a DC power input." },
+        ],
       },
     ],
     tags: ["OpenCV", "G-code", "DFS", "Cartesian Robot", "Inverse Kinematics", "Python", "Arduino", "GRBL"],
@@ -566,45 +596,87 @@ export const projects: Project[] = [
     homepageFeatured: false,
     github: "https://github.com/thura-robotics",
     period: "2023",
+    heroImage: "/projects/cartesian/hero_composite.jpg",
   },
   {
     slug: "vandalism-detection-tinyml",
     title: "Vandalism Detection with TinyML",
-    subtitle: "Edge AI on Microcontroller",
+    subtitle: "Edge AI on Arduino Nano 33 BLE · Edge Impulse",
     outcome:
-      "Shrank a vandalism-detection neural network small enough to run directly on a microcontroller — 15 FPS inference under 250 mW, with no cloud connection needed.",
+      "Trained a TinyML classifier that runs entirely on an Arduino Nano 33 BLE — listening for break-in sounds (glass breaking, a person calling for help) to trigger an alert, with the same approach reused to detect irregular vibration in industrial motors. Inference runs fully on-device in ~661 ms using just 41 KB of RAM, with no cloud connection.",
     projectType: "Coursework — Embedded ML",
     role: "Solo project",
     teamSize: "Solo",
     duration: "2023",
     contributions: [
-      "Trained a MobileNet-style depthwise-separable CNN on a self-collected, annotated dataset",
-      "Quantised the model to INT8 (TensorFlow Lite), shrinking it 2.1 MB → 540 KB with <2% accuracy loss",
-      "Deployed to an ARM Cortex-M4 with CMSIS-NN acceleration and an interrupt-driven capture pipeline",
+      "Collected and labelled an audio dataset with three classes — glass_break, help_me, and idle — using the Arduino Nano 33 BLE's onboard microphone",
+      "Trained and evaluated the classifier in Edge Impulse, using the feature explorer to confirm clean separation between the break-in and idle classes",
+      "Deployed the quantised model back to the Nano 33 BLE for fully on-device inference (~661 ms, 41 KB peak RAM) with real-time alerting",
+      "Adapted the same pipeline to industrial motor monitoring — reading the onboard accelerometer so vibration anomalies flag a faulty motor",
     ],
-    gallery: [
-      { caption: "Microcontroller running live on-device inference" },
-      { caption: "Model size / accuracy before vs after quantisation" },
-    ],
+    gallery: [],
     shortDescription:
-      "Real-time vandalism detection system using a quantised CNN deployed directly on an embedded microcontroller via TinyML, enabling on-device inference without cloud dependency.",
+      "A TinyML sound and vibration classifier running fully on an Arduino Nano 33 BLE — detecting break-in sounds (glass_break, help_me, idle) for security alerting, and reused to flag irregular vibration in industrial motors, all on-device via Edge Impulse.",
     fullDescription:
-      "This project demonstrates end-to-end deployment of a Convolutional Neural Network on a resource-constrained microcontroller for real-time anomaly detection. A custom vandalism detection dataset was collected and annotated, then used to train a lightweight CNN architecture. The model was quantised to INT8 using TensorFlow Lite and deployed on an ARM Cortex-M4 microcontroller. The system achieves 15 FPS inference on 96×96 resolution frames while consuming under 250 mW, making it suitable for battery-powered surveillance nodes. A hardware interrupt-driven image capture pipeline ensures consistent frame timing without an RTOS.",
+      "This project builds an end-to-end TinyML pipeline on the Arduino Nano 33 BLE, a microcontroller with an onboard microphone and 9-axis IMU. The primary application is security: the model listens for the sound of breaking glass (glass_break) and a person calling for help (help_me), distinguishing them from background ambience (idle), so a break-in attempt or distress call can trigger an immediate alert without any internet connection. The same workflow is reused for predictive maintenance in industrial settings — the onboard accelerometer captures motor vibration, and the TinyML model infers when the vibration signature deviates from normal, flagging a faulty or irregular motor. The entire workflow — data collection, training, testing, and deployment — was carried out in Edge Impulse, producing a quantised model that runs in roughly 661 ms per inference using only 41 KB of RAM.",
     technicalDetails: [
       {
-        heading: "Model Architecture & Quantisation",
-        body: "A MobileNet-inspired depthwise separable CNN architecture was selected for its favourable accuracy-to-parameter-count ratio on embedded targets. Post-training INT8 quantisation using TensorFlow Lite reduced the model size from 2.1 MB to 540 KB with less than 2% accuracy degradation on the validation set.",
+        heading: "Data Collection",
+        body: "Training data was captured directly on the Arduino Nano 33 BLE and streamed into Edge Impulse. Three sound classes were recorded — glass_break, help_me, and idle — and, for the motor use case, the onboard accelerometer logged vibration under normal and abnormal operation. Collecting on the target device keeps the samples matched to the real sensors.",
+        images: [
+          { src: "/projects/tinyML/voice_sample_fixed.jpg", caption: "Recording a help_me voice sample into the Nano 33 BLE while Edge Impulse captures the waveform live." },
+          { src: "/projects/tinyML/vibration_test_1.jpg", caption: "Nano 33 BLE mounted on the motor rig, sampling its accelerometer to capture the vibration signature." },
+          { src: "/projects/tinyML/data_collection_fixed.jpg", caption: "Data-acquisition setup — the motor test rig streaming sensor data to Edge Impulse on the laptop." },
+        ],
       },
       {
-        heading: "Embedded Deployment",
-        body: "TensorFlow Lite for Microcontrollers was compiled against the target ARM Cortex-M4 device using the ARM CMSIS-NN acceleration library for optimised convolution kernels. The inference pipeline runs in a FreeRTOS task with dedicated SRAM allocation for activations and model weights in flash.",
+        heading: "Training and Testing",
+        body: "Inside Edge Impulse, the raw signals are passed through a feature-extraction block (audio is converted to spectral / MFCC features; vibration uses spectral-analysis features) before a compact neural-network classifier. The dataset is split into training and test sets, and the feature explorer was used to visually verify that the classes form well-separated clusters — confirming the break-in sounds are distinguishable from idle background before committing to deployment. Model accuracy is validated on the held-out test set and on live data captured on-device.",
+        images: [
+          { src: "/projects/tinyML/sound_model.jpg", caption: "Training the sound model — a 1D-convolutional classifier reaching 97.3% validation accuracy across glass_break, help_me, and silence." },
+          { src: "/projects/tinyML/test_accuracy.jpg", caption: "Held-out test results for the sound model — 92.5% accuracy with its confusion matrix and feature explorer." },
+          { src: "/projects/tinyML/vibration_test.jpg", caption: "Vibration (motor) model testing — 100% accuracy separating motor fault states (case 1/2/3) from idle." },
+        ],
+      },
+      {
+        heading: "Low-Level Deployment",
+        body: "The trained model is exported from Edge Impulse as an optimised, quantised Arduino library and flashed onto the Nano 33 BLE, so all inference happens locally on the microcontroller — no cloud, no network latency, and full privacy. On-device performance measures roughly 661 ms per inference with a peak RAM usage of just 41 KB, comfortably within the device's constraints. On a positive detection (glass_break or help_me, or an abnormal motor vibration), the firmware raises an immediate local alert.",
+        images: [
+          { src: "/projects/tinyML/model_deployment.jpg", caption: "Deployment flow — the compiled .hex machine code is flashed to the Arduino Nano by a Python script that extracts the .hex, detects the COM port, and uploads via the Arduino CLI." },
+          { src: "/projects/tinyML/microcontroller.jpg", caption: "Target hardware — the Arduino Nano 33 BLE Sense with its onboard MP34DT05 microphone, LSM9DS1 9-axis IMU, and Nordic nRF52840 processor running the inference locally." },
+        ],
       },
     ],
-    tags: ["TinyML", "CNN", "TensorFlow Lite", "Edge AI", "ARM Cortex-M4", "Quantisation", "Embedded ML"],
+    tags: ["TinyML", "Edge Impulse", "Arduino Nano 33 BLE", "Audio Classification", "Vibration Analysis", "Anomaly Detection", "Embedded ML", "MFCC"],
     portfolioCategory: "AI & Computer Vision",
     homepageFeatured: false,
     github: "https://github.com/thura-robotics",
     period: "2023",
+    heroImage: "/projects/tinyML/hero_composite.jpg",
+  },
+  {
+    slug: "tello-hand-gesture",
+    title: "Hand-Gesture-Controlled DJI Tello Drone",
+    subtitle: "Computer Vision · MediaPipe · DJI Tello SDK",
+    outcome:
+      "Controlled a DJI Tello drone entirely with hand gestures — recognised in real time from MediaPipe hand-landmark detection.",
+    projectType: "Personal Project — Computer Vision",
+    role: "Solo project",
+    teamSize: "Solo",
+    duration: "2024",
+    shortDescription:
+      "A computer-vision project that flies a DJI Tello drone using hand gestures recognised through MediaPipe hand-landmark detection.",
+    fullDescription:
+      "This project demonstrates that a DJI Tello drone can be controlled through hand gestures, which are determined using MediaPipe hand-landmark detection. A camera tracks the hand, MediaPipe extracts the landmarks, and the recognised gesture is translated into a flight command sent to the drone. A full explanation can be found in the YouTube video linked below.",
+    contextImage: "/projects/tello/testing.png",
+    gallery: [],
+    technicalDetails: [],
+    tags: ["Computer Vision", "MediaPipe", "Python", "DJI Tello", "Gesture Recognition", "Hand Landmarks"],
+    portfolioCategory: "AI & Computer Vision",
+    homepageFeatured: false,
+    github: "https://github.com/thura-robotics",
+    period: "2024",
+    heroImage: "/projects/tello/hero.jpg",
   },
   {
     slug: "kira-robot-arm",
@@ -673,39 +745,50 @@ export const projects: Project[] = [
     title: "Attention Robot Prototype",
     subtitle: "NIT Sendai, Japan — Research Internship",
     outcome:
-      "During a research internship in Japan, built an expressive safety robot that warns lab technicians of hazards — turning to face them with servo gestures, OLED facial expressions, and audio, all within 100 ms of a trigger.",
+      "During a research internship in Japan, built an expressive attention robot that grabs people's attention through animated facial emotions on an M5 Dial display and a servo-driven gear mechanism that claps two bells together to produce a ringing sound.",
     projectType: "Internship — Research (NIT Sendai, Japan)",
     role: "Solo prototype build",
     teamSize: "Solo (mentored)",
     duration: "May – Jun 2025",
     contributions: [
-      "Wrote bare-metal C++ on Arduino Mega with a state-machine architecture (IDLE/TRACKING/ALERT/RESET)",
-      "Integrated PIR, temperature, and ultrasonic sensors into filtered hazard-detection logic",
-      "Drove servo gestures and a 128×64 OLED face via a custom I2C bitmap rendering routine",
+      "Designed emotion animations and converted each frame into binary bitmap data (via the imagetostl tool) embedded directly into the M5 Dial firmware",
+      "Programmed the M5 Dial module to render the animated facial expressions on its round LCD display",
+      "Built a servo-driven clapping mechanism — an MG996R servo driving a meshing gear train that brings two bells into contact to ring",
     ],
     gallery: [
-      { caption: "Attention robot prototype on the bench" },
-      { caption: "OLED expression + servo alert sequence" },
+      { src: "/projects/attention/robot_closeup_fixed.jpg", caption: "Close-up of the robot's expressive M5 Dial face displaying a smiling emotion above the gear-driven cymbal mechanism." },
+      { src: "/projects/attention/robot_1_trimmed.png", caption: "The completed attention robot on the workbench — 3D-printed body, M5 Dial head, and orange gear linkage driving the cymbals." },
+      { src: "/projects/attention/me_presenting_fixed.jpg", caption: "Presenting the Attention Robot at NIT Sendai, Japan — title slide projected during the final internship presentation." },
+      { src: "/projects/attention/me_presenting_2_fixed.jpg", caption: "Walking through the component breakdown (M5 Dial, MG996R servo, DFPlayer Mini, finger cymbals) during the presentation." },
+      { src: "/projects/attention/selfie_fixed.jpg", caption: "With the completed robot on demonstration day at NIT Sendai." },
+      { src: "/projects/attention/cert_photo.png", caption: "Programme completion at NIT Sendai, Japan, with a fellow intern." },
     ],
     shortDescription:
-      "Expressive safety robot developed at NIT Sendai that alerts laboratory technicians to hazards using servo-actuated gestures, OLED facial expressions, and audio feedback in real time.",
+      "Expressive attention robot developed at NIT Sendai that combines animated facial emotions on an M5 Dial display with a servo-actuated gear mechanism that claps two bells to ring for attention.",
     fullDescription:
-      "Developed during a competitive research internship at the National Institute of Technology, Sendai College, Japan, this project explores human-robot interaction as a safety mechanism in industrial laboratory settings. The robot uses a pan-tilt servo head to track personnel and orient its OLED face display toward detected hazard zones. When a hazard threshold is exceeded — sensed via temperature, gas, or proximity inputs — the robot executes a choreographed alert sequence: an attention-grabbing servo gesture, a contextual OLED expression, and a multi-tone piezo audio alert. The entire system runs bare-metal C++ on an Arduino Mega, achieving deterministic sub-100 ms response latency from sensor trigger to full alert activation.",
+      "Developed during a competitive research internship at the National Institute of Technology, Sendai College, Japan, this project explores human-robot interaction through expressive, attention-grabbing behaviour. The robot's face is an M5 Dial module with a round LCD that displays animated emotions, while a servo-driven gear mechanism claps two bells together to produce a ringing sound — combining visual and auditory cues to draw a person's attention. The emotional expressions are first designed in animation software, then converted into binary bitmap data and embedded into the M5 Dial firmware for playback. The clapping motion is generated by an MG996R servo whose rotation is transmitted through a meshing gear train, bringing the two bells into contact.",
     technicalDetails: [
       {
-        heading: "Embedded Firmware Architecture",
-        body: "The C++ firmware uses a state-machine architecture with states for IDLE, TRACKING, ALERT, and RESET. Servo control is implemented with hardware PWM timers for precise microsecond pulse timing. The OLED display is driven via I2C using a custom bitmap rendering library optimised for the 128×64 SSD1306 controller.",
+        heading: "Emotion Display (M5 Dial)",
+        body: "The robot expresses emotion through an M5 Dial module — a compact controller with an integrated round LCD screen. Each facial expression is first created as an animation in animation software, then converted into binary bitmap data using the imagetostl online tool. This binary data is stored directly within the M5 Dial firmware, which renders the frames on the LCD to animate the robot's face. Embedding the bitmaps in firmware keeps playback fast and removes any dependency on external storage.",
+        images: [
+          { src: "/projects/attention/wiring_diagram_trimmed.png", caption: "Wiring diagram — microcontroller connected to the M5 Dial display module, a DFPlayer Mini with speaker for audio, and supporting pull-up resistors." },
+        ],
       },
       {
-        heading: "Sensor Integration",
-        body: "Three sensor modalities feed the hazard detection logic: a PIR motion sensor for personnel tracking, a DHT22 temperature/humidity sensor for thermal alerts, and an ultrasonic HC-SR04 for proximity-based hazard zone boundary detection. Sensor readings are filtered with a simple moving average to prevent false triggers.",
+        heading: "Bell-Clapping Mechanism",
+        body: "The attention-grabbing sound is produced by a mechanical clapping mechanism driven by an MG996R high-torque servo motor. The servo's rotation is transmitted through a gear train, where meshing gears convert the motion into a clapping action. Two bells are mounted at the ends of the mechanism so that, at the point of contact, they strike together and produce a ringing sound — pairing the audio cue with the on-screen facial emotion.",
+        videos: [
+          { src: "/projects/attention/robot_ringing.mp4", caption: "The robot in action — the MG996R servo drives the gear train, clapping the two cymbals together to ring while the M5 Dial face animates." },
+        ],
       },
     ],
-    tags: ["C++", "Arduino", "Servo Control", "OLED", "I2C", "Human-Robot Interaction", "Safety Robotics", "Embedded C++"],
+    tags: ["M5 Dial", "MG996R Servo", "Gear Mechanism", "Embedded Firmware", "Human-Robot Interaction", "LCD Animation", "3D Printing"],
     portfolioCategory: "Robotics & Embedded",
     homepageFeatured: false,
     github: "https://github.com/thura-robotics",
     period: "May – Jun 2025",
+    heroImage: "/projects/attention/hero_composite.jpg",
   },
   {
     slug: "line-following-robot",
@@ -769,6 +852,7 @@ export const projects: Project[] = [
     period: "2022 – 2023",
     heroImage: "/projects/hi_speed_lfr/hero_composite.jpg",
     contextImage: "/projects/hi_speed_lfr/track.jpg",
+    pdf: "/projects/hi_speed_lfr/report.pdf",
   },
 ];
 
