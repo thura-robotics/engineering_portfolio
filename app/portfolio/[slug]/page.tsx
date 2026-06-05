@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, FileText } from "lucide-react";
 import { GithubIcon, YoutubeIcon } from "@/components/SocialIcons";
 import MediaFrame from "@/components/MediaFrame";
+import { renderRich } from "@/components/richText";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import katex from "katex";
@@ -108,7 +109,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                 marginBottom: "2.5rem",
               }}
             >
-              {project.outcome}
+              {renderRich(project.outcome)}
             </p>
           )}
 
@@ -204,7 +205,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                 {project.contributions.map((c, i) => (
                   <li key={i} style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
                     <span style={{ color: "var(--primary)", flexShrink: 0, marginTop: "2px", fontWeight: 700 }}>▹</span>
-                    <span style={{ color: "var(--text)", fontSize: "0.92rem", lineHeight: 1.7 }}>{c}</span>
+                    <span style={{ color: "var(--text)", fontSize: "0.92rem", lineHeight: 1.7 }}>{renderRich(c)}</span>
                   </li>
                 ))}
               </ul>
@@ -395,9 +396,9 @@ export default async function ProjectDetailPage({ params }: Props) {
           {/* ── 10. Links (GitHub + YouTube) ── */}
           <div style={{ borderTop: "1px solid var(--border)", paddingTop: "2rem", display: "flex", justifyContent: "center", gap: "1.25rem" }}>
             {[
-              { label: "View on GitHub", href: project.github, icon: <GithubIcon size={26} /> },
-              { label: "Watch Demo", href: project.youtube, icon: <YoutubeIcon size={26} /> },
-            ].map(({ label, href, icon }) =>
+              { label: "View on GitHub", href: project.github, icon: <GithubIcon size={26} />, cls: "proj-link" },
+              { label: "Watch Demo", href: project.youtube, icon: <YoutubeIcon size={26} />, cls: "proj-link proj-link-yt" },
+            ].map(({ label, href, icon, cls }) =>
               href ? (
                 <a
                   key={label}
@@ -406,7 +407,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                   aria-label={label}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="proj-link"
+                  className={cls}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -461,6 +462,13 @@ export default async function ProjectDetailPage({ params }: Props) {
           border-color: var(--primary) !important;
           transform: translateY(-4px);
           box-shadow: 0 8px 22px rgba(34,211,238,0.25);
+        }
+        /* YouTube icon lights up in YouTube red on hover */
+        .proj-link-yt:hover {
+          background: #FF0000 !important;
+          color: #ffffff !important;
+          border-color: #FF0000 !important;
+          box-shadow: 0 8px 22px rgba(255,0,0,0.3) !important;
         }
 
         /* ── Clickable title → PDF ── */

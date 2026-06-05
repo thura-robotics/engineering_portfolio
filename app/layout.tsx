@@ -25,6 +25,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
+  ),
   title: "Thura Zaw — Robotic & AI Engineer",
   description:
     "Portfolio of Thura Zaw — Robotics and AI Engineer specialising in ROS2, embedded systems, PCB design, and computer vision.",

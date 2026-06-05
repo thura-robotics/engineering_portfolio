@@ -1,5 +1,6 @@
 import { experience } from "@/lib/data";
 import Image from "next/image";
+import { renderRich } from "@/components/richText";
 
 const orgLogos: Record<string, { src: string; bg: string; padding: string }> = {
   "General Magic (Thailand) Co., Ltd": {
@@ -12,7 +13,7 @@ const orgLogos: Record<string, { src: string; bg: string; padding: string }> = {
     bg: "rgba(255,255,255,0.92)",
     padding: "4px",
   },
-  "King Mongkut's Institute of Technology Lad Krabang (KMITL)": {
+  "King Mongkut's Institute of Technology Ladkrabang (KMITL)": {
     src: "/logos/kmitl.svg",
     bg: "rgba(255,255,255,0.92)",
     padding: "4px",
@@ -118,7 +119,7 @@ export default function Experience() {
                 <ul style={{ paddingLeft: "1.25rem", margin: "0.75rem 0", color: "var(--text-muted)" }}>
                   {exp.bullets.map((b, j) => (
                     <li key={j} style={{ fontSize: "0.875rem", lineHeight: 1.75, marginBottom: "0.35rem" }}>
-                      {b}
+                      {renderRich(b)}
                     </li>
                   ))}
                 </ul>

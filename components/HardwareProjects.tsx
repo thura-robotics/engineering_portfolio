@@ -28,39 +28,19 @@ export default function HardwareProjects() {
 
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+          display: "flex",
+          flexDirection: "column",
           gap: "1.25rem",
         }}
       >
         {hardwareProjects.map((project, i) => (
           <div
             key={i}
-            className="card"
-            style={{ overflow: "hidden", display: "flex", flexDirection: "column" }}
+            className="card hw-tile"
+            style={{ overflow: "hidden", display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: "260px" }}
           >
-            {/* Thumbnail — blurred-fill, non-clickable */}
-            <div style={{ position: "relative", height: "160px", overflow: "hidden", background: "var(--surface-2)", flexShrink: 0, borderBottom: "1px solid var(--border)" }}>
-              {project.image ? (
-                <>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={project.image} alt="" aria-hidden="true"
-                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "blur(18px) brightness(0.45) saturate(1.1)", transform: "scale(1.15)" }}
-                  />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={project.image} alt={project.title}
-                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain" }}
-                  />
-                </>
-              ) : (
-                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", fontSize: "0.75rem", opacity: 0.5 }}>
-                  Photo coming soon
-                </div>
-              )}
-            </div>
-
-            {/* Card body */}
-            <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem", flex: 1 }}>
+            {/* Card body — left half */}
+            <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem", justifyContent: "center" }}>
             {/* Icon + title row */}
             <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
               <div
@@ -133,9 +113,36 @@ export default function HardwareProjects() {
               <ExternalLink size={14} /> Open PCB Viewer
             </a>
             </div>{/* end card body */}
+
+            {/* PCB image — right half */}
+            <div className="hw-thumb" style={{ position: "relative", overflow: "hidden", background: "var(--surface-2)", borderLeft: "1px solid var(--border)" }}>
+              {project.image ? (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={project.image} alt="" aria-hidden="true"
+                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "blur(18px) brightness(0.45) saturate(1.1)", transform: "scale(1.15)" }}
+                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={project.image} alt={project.title}
+                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain" }}
+                  />
+                </>
+              ) : (
+                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", fontSize: "0.75rem", opacity: 0.5 }}>
+                  Photo coming soon
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .hw-tile { grid-template-columns: 1fr !important; }
+          .hw-tile .hw-thumb { min-height: 200px; border-left: none !important; border-top: 1px solid var(--border) !important; }
+        }
+      `}</style>
     </div>
   );
 }

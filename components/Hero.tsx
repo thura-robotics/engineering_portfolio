@@ -74,11 +74,39 @@ export default function Hero() {
             style={{
               fontSize: "0.95rem",
               color: "var(--text-muted)",
-              marginBottom: "1.5rem",
+              marginBottom: "1.25rem",
             }}
           >
             {personalInfo.subtitle}
           </p>
+
+          {/* Availability badge */}
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              padding: "0.4rem 0.9rem",
+              marginBottom: "1.5rem",
+              borderRadius: "999px",
+              border: "1px solid rgba(74,222,128,0.35)",
+              background: "rgba(74,222,128,0.08)",
+              fontSize: "0.82rem",
+              color: "var(--text)",
+            }}
+          >
+            <span
+              style={{
+                width: "9px",
+                height: "9px",
+                borderRadius: "50%",
+                background: "#4ade80",
+                boxShadow: "0 0 8px rgba(74,222,128,0.8)",
+                flexShrink: 0,
+              }}
+            />
+            Open to <strong style={{ fontWeight: 700 }}>Robotics / Embedded Engineering</strong> roles · Bangkok
+          </div>
 
           <p
             style={{

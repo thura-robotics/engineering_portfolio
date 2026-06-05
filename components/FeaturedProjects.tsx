@@ -81,24 +81,6 @@ export default function FeaturedProjects() {
                     overflow: "hidden",
                   }}
                 >
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: "1rem",
-                      left: "1rem",
-                      fontSize: "0.68rem",
-                      fontWeight: 700,
-                      letterSpacing: "0.06em",
-                      textTransform: "uppercase",
-                      color: "var(--primary)",
-                      background: "rgba(34,211,238,0.14)",
-                      border: "1px solid rgba(34,211,238,0.35)",
-                      padding: "0.2rem 0.6rem",
-                      borderRadius: "999px",
-                    }}
-                  >
-                    Featured
-                  </span>
                   {!project.heroImage && <span style={{ opacity: 0.4 }}>Photo coming soon</span>}
                 </div>
 

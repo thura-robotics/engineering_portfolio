@@ -7,7 +7,7 @@ export const personalInfo = {
   location: "Bangkok, Thailand",
   github: "https://github.com/thura-robotics",
   linkedin: "https://www.linkedin.com/in/thura-robotics/",
-  bio: `I am a Robotics and Artificial Intelligence Engineering student at KMITL, Bangkok, graduating April 2026 with a GPA of 3.7/4.0 and First Class Honours. My work spans the full stack of robotics — from designing custom PCBs and embedded firmware to training AI vision models and deploying sim-to-real systems in NVIDIA Isaac Sim.
+  bio: `I am a Robotics and Artificial Intelligence Engineering graduate from KMITL, Bangkok. I graduated in April 2026 with a **GPA of 3.74/4.0** and **First Class Honours**. My work spans the full stack of robotics — from designing custom PCBs and embedded firmware to training AI vision models and deploying sim-to-real systems in NVIDIA Isaac Sim.
 
 I thrive at the intersection of hardware and software: building bipedal robot legs with CAN Bus communication, autonomous UAV-UGV inspection platforms, and real-time control systems. I am passionate about creating robots that work reliably in the real world, not just in simulation.`,
 };
@@ -15,10 +15,10 @@ I thrive at the intersection of hardware and software: building bipedal robot le
 export const education = [
   {
     degree: "Bachelor of Engineering — Robotics and Artificial Intelligence",
-    institution: "King Mongkut's Institute of Technology Lad Krabang (KMITL)",
+    institution: "King Mongkut's Institute of Technology Ladkrabang (KMITL)",
     location: "Bangkok, Thailand",
     period: "Aug 2022 – Apr 2026",
-    gpa: "3.7 / 4.0 · First Class Honours",
+    gpa: "3.74 / 4.0 · First Class Honours",
     courses: [
       "Mobile Robots",
       "Feedback Control",
@@ -46,7 +46,7 @@ export const theses = [
   {
     type: "Bachelor's Final Year Project",
     title: "Transformable Hybrid UAV-UGV System for Visual Inspection in Unstructured Environments",
-    institution: "King Mongkut's Institute of Technology Lad Krabang (KMITL)",
+    institution: "King Mongkut's Institute of Technology Ladkrabang (KMITL)",
     year: "2025 – 2026",
     description:
       "This capstone project presents a multi-modal robotic platform capable of transforming between aerial (UAV) and ground vehicle (UGV) configurations to support post-earthquake search and rescue missions. The system integrates a state-of-the-art computer vision pipeline using Roboflow and a custom-trained AI model for survivor and hazard detection in unstructured, GPS-denied environments. The ROS2-based architecture manages mode transitions, sensor fusion, and real-time mission control.",
@@ -64,9 +64,9 @@ export const experience = [
     description:
       "General Magic Industries builds AI products, workflow automation, and blockchain-enabled intelligence for enterprise teams.",
     bullets: [
-      "Designed and implemented the electrical system for a bipedal humanoid robot leg, enabling low-latency communication across 12 actuator joints using CAN Bus protocol and SocketCAN on ROS2 Control",
-      "Developed custom PCBs and embedded firmware for actuator control using KiCAD, LTSpice, STM32 Cube IDE, and STM32 Cube MX",
-      "Collaborated within a team of 4 to achieve sim-to-sim and sim-to-real prototyping in NVIDIA Isaac Sim with commercial Cubemars actuators and 1 Mbps ISO CAN standard",
+      "Designed and implemented the electrical system for a bipedal humanoid robot leg, enabling low-latency communication across **12 actuator joints** using **CAN Bus** protocol and **SocketCAN** on **ROS2 Control**",
+      "Developed custom **PCBs** and **embedded firmware** for actuator control using **KiCAD**, LTSpice, STM32 Cube IDE, and STM32 Cube MX",
+      "Collaborated within a team of 4 to achieve **sim-to-real** prototyping in **NVIDIA Isaac Sim** with commercial Cubemars actuators and the **1 Mbps ISO CAN** standard",
       "Coordinated university capstone requirements with company product goals in a joint academic-industry robotics initiative",
     ],
     tags: ["ROS2", "CAN Bus", "STM32", "KiCAD", "NVIDIA Isaac Sim", "PCB Design"],
@@ -79,13 +79,13 @@ export const experience = [
     description:
       "Engineering-focused technical college in Sendai, Japan, specialising in practical education and applied research.",
     bullets: [
-      "Created an attention robot prototype using C++, Arduino, servo control, and OLED display, enabling real-time danger alerts for technicians through expressive actions and sound",
+      "Created an **attention robot** prototype using **C++**, **Arduino**, servo control, and an OLED display, enabling **real-time danger alerts** for technicians through expressive actions and sound",
     ],
     tags: ["C++", "Arduino", "Servo Control", "OLED", "Embedded Systems"],
   },
   {
     role: "Teaching Assistant — General Physics Laboratory",
-    company: "King Mongkut's Institute of Technology Lad Krabang (KMITL)",
+    company: "King Mongkut's Institute of Technology Ladkrabang (KMITL)",
     location: "Bangkok, Thailand",
     period: "Jul 2024 – Mar 2025",
     description: "",
@@ -241,16 +241,16 @@ export const projects: Project[] = [
     title: "Transformable Hybrid UAV-UGV System",
     subtitle: "Capstone / Final Year Project",
     outcome:
-      "Built a robot that flies as a drone, then drives on the ground, to find survivors in earthquake rubble. I led the perception system — a custom AI vision model that detects people and hazards on-device at 28 FPS.",
+      "Built a robot that flies as a drone, then drives on the ground, to find survivors in earthquake rubble. I led the perception system — a custom **AI vision model** that detects people and hazards **on-device at 28 FPS**.",
     projectType: "Capstone — Final Year Project",
     role: "Perception & Systems Integration Lead",
     teamSize: "Team of 3",
     duration: "Aug 2025 – Apr 2026",
     contributions: [
-      "Trained and deployed a custom object-detection model (Roboflow + TensorRT) reaching 28 FPS on an embedded NVIDIA Jetson",
-      "Architected the ROS2 mission state machine governing UAV↔UGV mode transitions and goal-directed navigation",
-      "Integrated multi-sensor fusion (camera, IMU, proximity) into a unified 3D occupancy map for hazard localisation",
-      "Validated detection reliability to 8 m range through staged rubble field trials",
+      "Trained and deployed a custom **object-detection model** (**Roboflow** + **TensorRT**) reaching **28 FPS** on an embedded **NVIDIA Jetson**",
+      "Architected the **ROS2** mission state machine governing UAV↔UGV mode transitions and goal-directed navigation",
+      "Integrated **multi-sensor fusion** (camera, IMU, proximity) into a unified **3D occupancy map** for hazard localisation",
+      "Validated detection reliability to **8 m range** through staged rubble field trials",
     ],
     gallery: [
       { src: "/projects/hybrid/field_test.jpg", caption: "Field test — operating the platform in UAV configuration on an outdoor court." },
@@ -304,22 +304,23 @@ export const projects: Project[] = [
     github: "https://github.com/thura-robotics",
     period: "2025 – 2026",
     heroImage: "/projects/hybrid/hero_hd.jpg",
+    pdf: "/projects/hybrid/report.pdf",
   },
   {
     slug: "bipedal-humanoid-leg",
     title: "Bipedal Humanoid Robot Leg",
     subtitle: "General Magic (Thailand) Co., Ltd",
     outcome:
-      "Designed the complete electrical and firmware system for a 12-joint humanoid robot leg at a robotics company. All 12 motors talk over one CAN Bus network with sub-millisecond latency, and the same control code runs in both simulation and on real hardware.",
+      "Designed the complete **electrical and firmware system** for a **12-joint humanoid robot leg** at a robotics company. All 12 motors talk over one **CAN Bus** network with **sub-millisecond latency**, and the same control code runs in both simulation and on real hardware.",
     projectType: "Industry — Joint Academic-Industry Initiative",
     role: "Electrical & Firmware Engineer",
     teamSize: "Team of 4",
     duration: "Jun 2025 – Mar 2026",
     contributions: [
-      "Designed 3 custom PCBs in KiCAD — power distribution (48 V→5/3.3 V), CAN hub, and sensor aggregation boards",
-      "Implemented STM32 firmware running 1 kHz torque/position control loops per joint",
-      "Built the SocketCAN communication layer carrying all 12 joints on a single 1 Mbps ISO CAN bus with heartbeat fault detection",
-      "Enabled sim-to-real transfer by matching the Isaac Sim URDF to real Cubemars actuator dynamics via the ROS2 Control hardware interface",
+      "Designed **3 custom PCBs** in **KiCAD** — power distribution (48 V→5/3.3 V), CAN hub, and sensor aggregation boards",
+      "Implemented **STM32 firmware** running **1 kHz** torque/position control loops per joint",
+      "Built the **SocketCAN** communication layer carrying all 12 joints on a single **1 Mbps ISO CAN** bus with heartbeat fault detection",
+      "Enabled **sim-to-real transfer** by matching the **Isaac Sim** URDF to real Cubemars actuator dynamics via the **ROS2 Control** hardware interface",
     ],
     heroImage: "/projects/bipedal/hero.jpg",
     gallery: [
@@ -373,15 +374,15 @@ export const projects: Project[] = [
     title: "Autonomous Leaf Collecting Robot",
     subtitle: "Adaptive Feedback Control Loop",
     outcome:
-      "Built an outdoor robot that drives itself around a garden collecting leaves — no GPS. I designed the custom PCB that bridges the high-level ROS computer to the low-level motor controller, and the Kalman Filter that keeps it on course over bumpy terrain.",
+      "Built an outdoor robot that drives itself around a garden collecting leaves — **no GPS**. I designed the **custom PCB** that bridges the high-level **ROS** computer to the low-level motor controller, and the **Kalman Filter** that keeps it on course over bumpy terrain.",
     projectType: "Coursework — Mobile Robotics",
     role: "Hardware & Control",
     teamSize: "Team of 3",
     duration: "2023",
     contributions: [
-      "Designed the full mechanical system in SOLIDWORKS — Mars rover-inspired rocker-bogie suspension, Ackermann front steering linkage, centrifugal blower assembly, and aluminium extrusion chassis",
-      "Built the high-level AI processing pipeline: WebSocket server offloading SAM-style segmentation to a remote AI server, point-prompt grid generation, mask-to-direction command conversion, and ROS1 integration on Raspberry Pi",
-      "Implemented an Extended Kalman Filter in C++ fusing wheel encoder odometry with a 6-axis IMU for drift-free pose estimation on uneven terrain",
+      "Designed the full mechanical system in **SOLIDWORKS** — Mars rover-inspired **rocker-bogie suspension**, **Ackermann steering** linkage, centrifugal blower assembly, and aluminium extrusion chassis",
+      "Built the high-level AI pipeline: a **WebSocket** server offloading **SAM-style segmentation** to a remote AI server, point-prompt grid generation, mask-to-direction conversion, and **ROS1** integration on **Raspberry Pi**",
+      "Implemented an **Extended Kalman Filter** in **C++** fusing wheel odometry with a **6-axis IMU** for drift-free pose estimation on uneven terrain",
     ],
     gallery: [
       { caption: "Robot collecting leaves during an outdoor run" },
@@ -430,6 +431,8 @@ export const projects: Project[] = [
     github: "https://github.com/thura-robotics",
     period: "2023",
     heroImage: "/projects/leaf_collection/hero_composite.jpg",
+    pdf: "/projects/leaf_collection/report.pdf",
+    youtube: "https://www.youtube.com/watch?v=87p56Rra9FQ",
     teamImage: "/projects/leaf_collection/teams.png",
   },
   {
@@ -437,7 +440,7 @@ export const projects: Project[] = [
     title: "Unitree A1 Robot Dog — Sim-to-Real",
     subtitle: "NVIDIA Isaac Sim · DDPG & PPO",
     outcome:
-      "Trained a Unitree A1 quadruped to stand up and walk over varied terrain using custom deep reinforcement learning in NVIDIA Isaac Sim.",
+      "Trained a **Unitree A1** quadruped to stand up and walk over varied terrain using custom **deep reinforcement learning** in **NVIDIA Isaac Sim**.",
     projectType: "Coursework — Reinforcement Learning",
     role: "Solo project",
     teamSize: "Solo",
@@ -462,21 +465,23 @@ export const projects: Project[] = [
     github: "https://github.com/thura-robotics",
     period: "2024",
     heroImage: "/projects/unitree/hero.png",
+    pdf: "/projects/unitree/report.pdf",
+    youtube: "https://youtu.be/dODO1rzZ1qs",
   },
   {
     slug: "omnidirectional-robot",
     title: "Large-Scale Omnidirectional Mobile Robot",
     subtitle: "Offline SLAM with ROS",
     outcome:
-      "Built a large (1.2 m) Mecanum-wheel robot that can move in any direction and maps big indoor spaces autonomously, achieving centimetre-level positioning across 200 m+ runs.",
+      "Built a large (1.2 m) **Mecanum-wheel robot** that can move in any direction and maps big indoor spaces autonomously, achieving **centimetre-level positioning** across **200 m+ runs**.",
     projectType: "Coursework — Mobile Robots",
     role: "Software & Kinematics",
     teamSize: "Team of 4",
     duration: "2024",
     contributions: [
-      "Derived and coded the holonomic Mecanum kinematics from scratch in C++",
-      "Built the ROS offline SLAM pipeline (2D LiDAR + Gmapping) with ICP loop-closure to remove drift",
-      "Integrated odometry, scan-matching, and navigation into a coordinated multi-node ROS system",
+      "Derived and coded the holonomic **Mecanum kinematics** from scratch in **C++**",
+      "Built the **ROS offline SLAM** pipeline (**2D LiDAR** + **Gmapping**) with **ICP loop-closure** to remove drift",
+      "Integrated odometry, scan-matching, and navigation into a coordinated **multi-node ROS** system",
     ],
     gallery: [
       { src: "/projects/slam_bot/cad_front_height.jpg",    caption: "Front elevation CAD view annotating the ~460 mm total robot height across the three-tier aluminium frame." },
@@ -545,15 +550,15 @@ export const projects: Project[] = [
     title: "Cartesian Drawing Robot",
     subtitle: "K-Engineering World Tour 2024 — Most Innovative Project Award",
     outcome:
-      "Built a robot that turns any portrait photo into a hand-drawn pencil sketch. It won the Most Innovative Project Award at K-Engineering World Tour 2024. My vision-to-G-code pipeline cut pen-travel time by over 60%.",
+      "Built a robot that turns any portrait photo into a hand-drawn pencil sketch. It won the **Most Innovative Project Award** at K-Engineering World Tour 2024. My **vision-to-G-code pipeline** cut pen-travel time by **over 60%**.",
     projectType: "Competition — Award Winner",
     role: "Vision Pipeline & Software",
     teamSize: "Team of 4",
     duration: "2023",
     contributions: [
-      "Built the OpenCV pipeline (edge detection, tone mapping, contour extraction) converting photos into stroke sets",
-      "Designed a custom DFS path optimiser that reduced total pen-up travel by 60% vs naive ordering",
-      "Generated GRBL-compatible G-code toolpaths driving the XY Cartesian motion system",
+      "Built the **OpenCV** pipeline (edge detection, tone mapping, contour extraction) converting photos into stroke sets",
+      "Designed a custom **DFS path optimiser** that reduced total pen-up travel by **60%** vs naive ordering",
+      "Generated **GRBL**-compatible **G-code** toolpaths driving the XY Cartesian motion system",
     ],
     gallery: [
       { src: "/projects/cartesian/testing_trimmed.jpg", caption: "Live testing — the robot drawing a portrait on paper while driven from the laptop over serial." },
@@ -597,22 +602,24 @@ export const projects: Project[] = [
     github: "https://github.com/thura-robotics",
     period: "2023",
     heroImage: "/projects/cartesian/hero_composite.jpg",
+    pdf: "/projects/cartesian/report.pdf",
+    youtube: "https://youtu.be/NWOrIN7Ekjc",
   },
   {
     slug: "vandalism-detection-tinyml",
     title: "Vandalism Detection with TinyML",
     subtitle: "Edge AI on Arduino Nano 33 BLE · Edge Impulse",
     outcome:
-      "Trained a TinyML classifier that runs entirely on an Arduino Nano 33 BLE — listening for break-in sounds (glass breaking, a person calling for help) to trigger an alert, with the same approach reused to detect irregular vibration in industrial motors. Inference runs fully on-device in ~661 ms using just 41 KB of RAM, with no cloud connection.",
+      "Trained a **TinyML classifier** that runs entirely on an **Arduino Nano 33 BLE** — listening for break-in sounds (glass breaking, a person calling for help) to trigger an alert, with the same approach reused to detect irregular vibration in industrial motors. Inference runs fully **on-device in ~661 ms** using just **41 KB of RAM**, with no cloud connection.",
     projectType: "Coursework — Embedded ML",
     role: "Solo project",
     teamSize: "Solo",
     duration: "2023",
     contributions: [
-      "Collected and labelled an audio dataset with three classes — glass_break, help_me, and idle — using the Arduino Nano 33 BLE's onboard microphone",
-      "Trained and evaluated the classifier in Edge Impulse, using the feature explorer to confirm clean separation between the break-in and idle classes",
-      "Deployed the quantised model back to the Nano 33 BLE for fully on-device inference (~661 ms, 41 KB peak RAM) with real-time alerting",
-      "Adapted the same pipeline to industrial motor monitoring — reading the onboard accelerometer so vibration anomalies flag a faulty motor",
+      "Collected and labelled an **audio dataset** with three classes — **glass_break, help_me, idle** — using the Arduino Nano 33 BLE's onboard microphone",
+      "Trained and evaluated the classifier in **Edge Impulse**, using the feature explorer to confirm clean separation between the break-in and idle classes",
+      "Deployed the **quantised model** back to the Nano 33 BLE for fully **on-device inference** (~661 ms, 41 KB peak RAM) with real-time alerting",
+      "Adapted the same pipeline to **industrial motor monitoring** — reading the onboard accelerometer so vibration anomalies flag a faulty motor",
     ],
     gallery: [],
     shortDescription:
@@ -653,13 +660,15 @@ export const projects: Project[] = [
     github: "https://github.com/thura-robotics",
     period: "2023",
     heroImage: "/projects/tinyML/hero_composite.jpg",
+    pdf: "/projects/tinyML/report.pdf",
+    youtube: "https://youtu.be/g0CZqJ32U-8",
   },
   {
     slug: "tello-hand-gesture",
     title: "Hand-Gesture-Controlled DJI Tello Drone",
     subtitle: "Computer Vision · MediaPipe · DJI Tello SDK",
     outcome:
-      "Controlled a DJI Tello drone entirely with hand gestures — recognised in real time from MediaPipe hand-landmark detection.",
+      "Controlled a **DJI Tello drone** entirely with hand gestures — recognised in real time from **MediaPipe hand-landmark detection**.",
     projectType: "Personal Project — Computer Vision",
     role: "Solo project",
     teamSize: "Solo",
@@ -677,22 +686,23 @@ export const projects: Project[] = [
     github: "https://github.com/thura-robotics",
     period: "2024",
     heroImage: "/projects/tello/hero.jpg",
+    youtube: "https://www.youtube.com/watch?v=lnzAefXNuVE",
   },
   {
     slug: "kira-robot-arm",
     title: "K.I.R.A — Kinematics Integrated Robot Arm",
     subtitle: "Arduino · CNC Shield · Bluetooth · MIT App Inventor",
     outcome:
-      "Built a 3-axis 3-DOF robot arm controlled wirelessly via a custom Android app — Arduino UNO with CNC shield drives three stepper motors and a gripper stepper over Bluetooth HC-05, executing pre-programmed pick-and-place operations on command.",
+      "Built a **3-axis 3-DOF robot arm** controlled wirelessly via a custom **Android app** — an **Arduino UNO + CNC shield** drives three stepper motors and a gripper stepper over **Bluetooth HC-05**, executing pre-programmed pick-and-place operations on command.",
     projectType: "Coursework — Kinematics & Dynamics",
     role: "Solo project",
     teamSize: "Solo",
     duration: "2023",
     contributions: [
-      "Designed and assembled the 3-DOF arm with three NEMA stepper motors driven by an Arduino UNO + CNC shield stack",
-      "Wired and integrated the HC-05 Bluetooth module for wireless serial communication between the Arduino and Android app",
-      "Built a custom Android application in MIT App Inventor with pre-programmed PICK, GRAB, PLACE, and RELEASE routines transmitted as Bluetooth commands",
-      "Derived forward and inverse kinematics for the 3-axis configuration and implemented the joint-angle solver in Arduino C++ to map workspace coordinates to motor steps",
+      "Designed and assembled the **3-DOF arm** with three **NEMA stepper motors** driven by an **Arduino UNO + CNC shield** stack",
+      "Wired and integrated the **HC-05 Bluetooth** module for wireless serial communication between the Arduino and Android app",
+      "Built a custom **Android app in MIT App Inventor** with pre-programmed PICK, GRAB, PLACE, and RELEASE routines sent as Bluetooth commands",
+      "Derived **forward and inverse kinematics** for the 3-axis configuration and implemented the joint-angle solver in **Arduino C++** to map workspace coordinates to motor steps",
     ],
     gallery: [
       { src: "/projects/kira/app_demo.png",         caption: "Full system demo — robot arm on the pick-and-place mat with red and pink cubes, mobile app (left) and desktop GUI (right) showing PICK / GRAB / PLACE / RELEASE commands." },
@@ -739,21 +749,23 @@ export const projects: Project[] = [
     github: "https://github.com/thura-robotics",
     period: "2023",
     heroImage: "/projects/kira/hero.png",
+    pdf: "/projects/kira/report.pdf",
+    youtube: "https://www.youtube.com/watch?v=D6i2JJkeEAg",
   },
   {
     slug: "attention-robot",
     title: "Attention Robot Prototype",
     subtitle: "NIT Sendai, Japan — Research Internship",
     outcome:
-      "During a research internship in Japan, built an expressive attention robot that grabs people's attention through animated facial emotions on an M5 Dial display and a servo-driven gear mechanism that claps two bells together to produce a ringing sound.",
+      "During a research internship in Japan, built an expressive **attention robot** that grabs people's attention through animated facial emotions on an **M5 Dial display** and a **servo-driven gear mechanism** that claps two bells together to produce a ringing sound.",
     projectType: "Internship — Research (NIT Sendai, Japan)",
     role: "Solo prototype build",
     teamSize: "Solo (mentored)",
     duration: "May – Jun 2025",
     contributions: [
-      "Designed emotion animations and converted each frame into binary bitmap data (via the imagetostl tool) embedded directly into the M5 Dial firmware",
-      "Programmed the M5 Dial module to render the animated facial expressions on its round LCD display",
-      "Built a servo-driven clapping mechanism — an MG996R servo driving a meshing gear train that brings two bells into contact to ring",
+      "Designed emotion animations and converted each frame into **binary bitmap data** (via the imagetostl tool) embedded directly into the **M5 Dial firmware**",
+      "Programmed the **M5 Dial** module to render the animated facial expressions on its round LCD display",
+      "Built a **servo-driven clapping mechanism** — an **MG996R servo** driving a meshing gear train that brings two bells into contact to ring",
     ],
     gallery: [
       { src: "/projects/attention/robot_closeup_fixed.jpg", caption: "Close-up of the robot's expressive M5 Dial face displaying a smiling emotion above the gear-driven cymbal mechanism." },
@@ -795,15 +807,15 @@ export const projects: Project[] = [
     title: "High-Speed Line Following Robot",
     subtitle: "KMITL Line Following Competition — 2nd Prize",
     outcome:
-      "Designed a competition line-following robot from scratch — custom PCB, STM32 firmware, and a tightly tuned PID loop — that placed 2nd at the KMITL Line Following Competition.",
+      "Designed a competition line-following robot from scratch — **custom PCB**, **STM32 firmware**, and a tightly tuned **PID loop** — that placed **2nd at the KMITL Line Following Competition**.",
     projectType: "Competition — 2nd Prize",
     role: "Full design (PCB, firmware, control)",
     teamSize: "Team of 2",
     duration: "2022 – 2023",
     contributions: [
-      "Designed the 2-layer KiCAD PCB that doubles as the robot chassis — routing STM32F411RE, DRV8833 motor driver, 8-channel IR sensor array, LEDs, and power management within the 230×230 mm size limit",
-      "Implemented sensor normalisation in C — calibration, range mapping, and weighted-centroid position estimation from 8 phototransistor readings",
-      "Tuned the PID feedback loop (Kp, Ki, Kd) iteratively on the competition track profile for oscillation-free high-speed cornering",
+      "Designed the **2-layer KiCAD PCB** that doubles as the robot chassis — routing **STM32F411RE**, **DRV8833** motor driver, 8-channel IR sensor array, LEDs, and power management within the 230×230 mm size limit",
+      "Implemented **sensor normalisation** in C — calibration, range mapping, and **weighted-centroid** position estimation from 8 phototransistor readings",
+      "Tuned the **PID feedback loop** (Kp, Ki, Kd) iteratively on the competition track profile for oscillation-free high-speed cornering",
     ],
     gallery: [
       { src: "/projects/hi_speed_lfr/hero.jpg",    caption: "Finished and wired robot — LiPo battery mounted, STM32F411RE Nucleo seated, and both drive wheels fitted." },
@@ -853,6 +865,7 @@ export const projects: Project[] = [
     heroImage: "/projects/hi_speed_lfr/hero_composite.jpg",
     contextImage: "/projects/hi_speed_lfr/track.jpg",
     pdf: "/projects/hi_speed_lfr/report.pdf",
+    youtube: "https://www.youtube.com/watch?v=gd7jASQJzaA",
   },
 ];
 
@@ -901,6 +914,24 @@ export const certifications: {
 // Add new entries here whenever a new design is published to GitHub Pages.
 // The viewer URL is the full link to the interactive PCB viewer page.
 export const hardwareProjects = [
+  {
+    title: "VR Headset Tracker",
+    description:
+      "IMU-based head-movement tracker PCB for VR goggles, built around the Bosch BNO055 9-axis absolute-orientation sensor. Streams real-time head orientation for low-latency VR head tracking, with a pin-header breakout to the host and a compact board outline that mounts directly to the headset.",
+    tools: ["KiCad", "BNO055", "9-Axis IMU", "VR", "PCB Layout"],
+    viewerUrl: "https://thura-robotics.github.io/designs/vr_headset_tracker.html",
+    year: "2025",
+    image: "/projects/pcbs/tracker_pcb.png",
+  },
+  {
+    title: "CAN Bus Splicer",
+    description:
+      "Multi-node CAN bus distribution board that delivers both power and CAN signal to every node simultaneously. Daisy-chainable connectors let multiple devices share a single bus and supply rail, simplifying the wiring of a distributed multi-node system.",
+    tools: ["KiCad", "CAN Bus", "Power Distribution", "PCB Layout"],
+    viewerUrl: "https://thura-robotics.github.io/designs/canbus_splicer.html",
+    year: "2025",
+    image: "/projects/pcbs/canbus_pcb.png",
+  },
   {
     title: "STM32 Line Following Robot PCB",
     description:

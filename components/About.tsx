@@ -1,5 +1,6 @@
 import { personalInfo } from "@/lib/data";
 import PhotoLightbox from "@/components/PhotoLightbox";
+import { renderRich } from "@/components/richText";
 
 export default function About() {
   return (
@@ -38,7 +39,7 @@ export default function About() {
                     fontSize: "0.95rem",
                   }}
                 >
-                  {para}
+                  {renderRich(para)}
                 </p>
               ))}
             </div>
@@ -64,14 +65,14 @@ export default function About() {
                 Quick Facts
               </h3>
               {[
-                { label: "Degree", value: "B.Eng — Robotics & AI" },
-                { label: "University", value: "KMITL, Bangkok" },
-                { label: "GPA", value: "3.7 / 4.0 · First Class Honours" },
-                { label: "Graduating", value: "April 2026" },
-                { label: "Location", value: personalInfo.location },
-                { label: "Languages", value: "English, Japanese" },
-                { label: "Interests", value: "Guitar, Chess, Novels, Gym" },
-              ].map(({ label, value }) => (
+                { label: "Degree", value: "B.Eng — Robotics & AI", bold: false },
+                { label: "University", value: "KMITL, Bangkok", bold: false },
+                { label: "GPA", value: "3.74 / 4.0 · First Class Honours", bold: true },
+                { label: "Graduated", value: "April 2026", bold: false },
+                { label: "Location", value: personalInfo.location, bold: false },
+                { label: "Languages", value: "English, Japanese", bold: false },
+                { label: "Interests", value: "Guitar, Chess, Novels, Gym", bold: false },
+              ].map(({ label, value, bold }) => (
                 <div
                   key={label}
                   style={{
@@ -84,7 +85,7 @@ export default function About() {
                   }}
                 >
                   <span style={{ color: "var(--text-muted)", flexShrink: 0 }}>{label}</span>
-                  <span style={{ color: "var(--text)", textAlign: "right" }}>{value}</span>
+                  <span style={{ color: "var(--text)", textAlign: "right", fontWeight: bold ? 700 : 400 }}>{value}</span>
                 </div>
               ))}
             </div>

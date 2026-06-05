@@ -2,7 +2,7 @@ import { education } from "@/lib/data";
 import Image from "next/image";
 
 const institutionLogos: Record<string, { src: string; bg: string; padding: string }> = {
-  "King Mongkut's Institute of Technology Lad Krabang (KMITL)": {
+  "King Mongkut's Institute of Technology Ladkrabang (KMITL)": {
     src: "/logos/kmitl.svg",
     bg: "rgba(255,255,255,0.92)",
     padding: "4px",
@@ -101,7 +101,7 @@ export default function Education() {
                     {edu.gpa && (
                       <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", margin: "0.5rem 0" }}>
                         <span style={{ color: "var(--primary)", fontWeight: 600 }}>GPA: </span>
-                        {edu.gpa}
+                        <span style={{ color: "var(--text)", fontWeight: 700 }}>{edu.gpa}</span>
                       </p>
                     )}
 

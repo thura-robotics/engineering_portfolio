@@ -1,7 +1,7 @@
-import { projects } from "@/lib/data";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HardwareProjects from "@/components/HardwareProjects";
+import ProjectsBrowser from "@/components/ProjectsBrowser";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
@@ -10,19 +10,6 @@ export const metadata: Metadata = {
   title: "Projects — Thura Zaw",
   description: "Full project portfolio of Thura Zaw — Robotics, Embedded Systems, AI, and Computer Vision projects.",
 };
-
-const categories = [
-  {
-    id: "Robotics & Embedded" as const,
-    label: "Robotics & Embedded Projects",
-    description: "Autonomous systems, mechanical design, embedded firmware, PCB, and hardware-software integration.",
-  },
-  {
-    id: "AI & Computer Vision" as const,
-    label: "AI & Computer Vision Projects",
-    description: "Machine learning, deep learning, TinyML, reinforcement learning, and visual intelligence applications.",
-  },
-];
 
 export default function PortfolioPage() {
   return (
@@ -57,124 +44,7 @@ export default function PortfolioPage() {
 
         {/* Sections */}
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "3rem 1.5rem" }}>
-          {categories.map((cat) => {
-            const catProjects = projects.filter((p) => p.portfolioCategory === cat.id);
-            return (
-              <div key={cat.id} style={{ marginBottom: "4rem" }}>
-                <div style={{ marginBottom: "1.75rem" }}>
-                  <h2 style={{ fontSize: "1.4rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.4rem" }}>
-                    {cat.label}
-                  </h2>
-                  <p style={{ fontSize: "0.875rem", color: "var(--text-muted)" }}>{cat.description}</p>
-                  <div style={{ width: "48px", height: "3px", background: "var(--primary)", borderRadius: "2px", marginTop: "0.75rem" }} />
-                </div>
-
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-                    gap: "1.25rem",
-                  }}
-                >
-                  {catProjects.map((project) => (
-                    <Link
-                      key={project.slug}
-                      href={`/portfolio/${project.slug}`}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <div
-                        className="card"
-                        style={{
-                          overflow: "hidden",
-                          height: "100%",
-                          display: "flex",
-                          flexDirection: "column",
-                        }}
-                      >
-                        {/* Thumbnail */}
-                        <div
-                          style={{
-                            position: "relative",
-                            height: "160px",
-                            overflow: "hidden",
-                            borderBottom: "1px solid var(--border)",
-                            background: "var(--surface-2)",
-                            flexShrink: 0,
-                          }}
-                        >
-                          {project.heroImage ? (
-                            <>
-                              {/* Blurred backdrop — fills bars for wide composites */}
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
-                                src={project.heroImage}
-                                alt=""
-                                aria-hidden="true"
-                                style={{
-                                  position: "absolute", inset: 0,
-                                  width: "100%", height: "100%",
-                                  objectFit: "cover",
-                                  filter: "blur(18px) brightness(0.45) saturate(1.1)",
-                                  transform: "scale(1.15)",
-                                }}
-                              />
-                              {/* Foreground — full image, always visible */}
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
-                                src={project.heroImage}
-                                alt={project.title}
-                                style={{
-                                  position: "absolute", inset: 0,
-                                  width: "100%", height: "100%",
-                                  objectFit: "contain",
-                                }}
-                              />
-                            </>
-                          ) : (
-                            <div style={{
-                              position: "absolute", inset: 0,
-                              background: "linear-gradient(135deg, var(--surface-2) 0%, var(--surface) 100%)",
-                              display: "flex", alignItems: "center", justifyContent: "center",
-                              color: "var(--text-muted)", fontSize: "0.75rem", opacity: 0.5,
-                            }}>
-                              Photo coming soon
-                            </div>
-                          )}
-                        </div>
-
-                        <div style={{ padding: "1.25rem", flex: 1, display: "flex", flexDirection: "column" }}>
-                          <h3
-                            style={{
-                              fontSize: "0.95rem",
-                              fontWeight: 700,
-                              color: "var(--text)",
-                              marginBottom: "0.5rem",
-                              lineHeight: 1.4,
-                            }}
-                          >
-                            {project.title}
-                          </h3>
-
-                          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.3rem", marginBottom: "0.75rem" }}>
-                            {project.tags.slice(0, 3).map((tag) => (
-                              <span key={tag} className="tag">{tag}</span>
-                            ))}
-                          </div>
-
-                          <div style={{ marginTop: "auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                            <span style={{ fontSize: "0.78rem", color: "var(--text-muted)" }}>{project.period}</span>
-                            <span style={{ fontSize: "0.8rem", color: "var(--primary)", display: "inline-flex", alignItems: "center", gap: "0.2rem" }}>
-                              Details <ArrowRight size={12} />
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+          <ProjectsBrowser />
 
           <HardwareProjects />
         </div>
