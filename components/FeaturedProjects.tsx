@@ -2,10 +2,13 @@ import { projects } from "@/lib/data";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-const featuredSlugs = ["omnidirectional-robot", "bipedal-humanoid-leg"];
+const featuredSlugs = ["uav-ugv-system", "omnidirectional-robot", "bipedal-humanoid-leg"];
 
 export default function FeaturedProjects() {
-  const featured = projects.filter((p) => featuredSlugs.includes(p.slug));
+  // Preserve the order defined in featuredSlugs
+  const featured = featuredSlugs
+    .map((slug) => projects.find((p) => p.slug === slug))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
   return (
     <section id="projects" className="section section-alt">
@@ -64,24 +67,38 @@ export default function FeaturedProjects() {
                   flexDirection: "column",
                 }}
               >
-                {/* Image placeholder */}
+                {/* Thumbnail — blurred-fill so wide composites show fully */}
                 <div
                   style={{
                     height: "200px",
-                    background: project.heroImage
-                      ? `url(${project.heroImage}) center/cover no-repeat`
-                      : "linear-gradient(135deg, var(--surface-2) 0%, var(--surface) 100%)",
                     borderBottom: "1px solid var(--border)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "var(--text-muted)",
-                    fontSize: "0.8rem",
                     position: "relative",
                     overflow: "hidden",
+                    background: "var(--surface-2)",
+                    flexShrink: 0,
                   }}
                 >
-                  {!project.heroImage && <span style={{ opacity: 0.4 }}>Photo coming soon</span>}
+                  {project.heroImage ? (
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={project.heroImage}
+                        alt=""
+                        aria-hidden="true"
+                        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "blur(18px) brightness(0.45) saturate(1.1)", transform: "scale(1.15)" }}
+                      />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={project.heroImage}
+                        alt={project.title}
+                        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain" }}
+                      />
+                    </>
+                  ) : (
+                    <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", fontSize: "0.8rem", opacity: 0.4 }}>
+                      Photo coming soon
+                    </div>
+                  )}
                 </div>
 
                 <div style={{ padding: "1.5rem", flex: 1, display: "flex", flexDirection: "column" }}>

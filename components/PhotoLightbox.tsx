@@ -43,39 +43,40 @@ export default function PhotoLightbox({
 
   return (
     <>
-      {/* ── Thumbnail (clickable) ── */}
-      <div
-        style={{
-          borderRadius: "0.75rem",
-          overflow: "hidden",
-          border: "1px solid var(--border)",
-          lineHeight: 0,
-          width: "80%",
-          cursor: "zoom-in",
-          transition: "box-shadow 0.2s, transform 0.2s",
-        }}
-        onClick={openLightbox}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 0 2px var(--primary)";
-          (e.currentTarget as HTMLDivElement).style.transform = "scale(1.01)";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
-          (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
-        }}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={thumbnail}
-          alt={alt}
-          style={{ width: "100%", display: "block", objectFit: "cover" }}
-        />
+      {/* ── Thumbnail (clickable) + caption, sharing the image's width ── */}
+      <div style={{ width: "80%" }}>
+        <div
+          style={{
+            borderRadius: "0.75rem",
+            overflow: "hidden",
+            border: "1px solid var(--border)",
+            lineHeight: 0,
+            cursor: "zoom-in",
+            transition: "box-shadow 0.2s, transform 0.2s",
+          }}
+          onClick={openLightbox}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 0 2px var(--primary)";
+            (e.currentTarget as HTMLDivElement).style.transform = "scale(1.01)";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
+            (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={thumbnail}
+            alt={alt}
+            style={{ width: "100%", display: "block", objectFit: "cover" }}
+          />
+        </div>
+        {caption && (
+          <p style={{ fontSize: "0.73rem", color: "var(--text-muted)", textAlign: "center", lineHeight: 1.4, marginTop: "0.5rem" }}>
+            {caption}
+          </p>
+        )}
       </div>
-      {caption && (
-        <p style={{ fontSize: "0.73rem", color: "var(--text-muted)", textAlign: "center", lineHeight: 1.4 }}>
-          {caption}
-        </p>
-      )}
 
       {/* ── Lightbox overlay ── */}
       {open && (

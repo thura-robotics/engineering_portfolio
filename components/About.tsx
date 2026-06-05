@@ -22,7 +22,7 @@ export default function About() {
               thumbnail="/projects/TA_portrait.png"
               fullSrc="/projects/TA.png"
               alt="Thura Zaw — Teaching Assistant"
-              caption="Teaching Kirchhoff's Laws as a Teaching Assistant at KMITL"
+              caption="Teaching Assistant at KMITL"
             />
           </div>
 
